@@ -87,9 +87,9 @@ class EnvelopeGenerator {
             throw new Error('Invalid pixel dimensions');
         }
 
-        // Calculate template dimensions (just the envelope size)
-        const totalWidth = pixelWidth;
-        const totalHeight = pixelHeight;
+        // Calculate template dimensions (envelope size + flaps)
+        const totalWidth = pixelWidth + (2 * pixelFlapHeight); // Left and right flaps
+        const totalHeight = pixelHeight + (2 * pixelFlapHeight); // Top and bottom flaps
 
         // Create SVG
         const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -114,10 +114,13 @@ class EnvelopeGenerator {
         const centerX = totalWidth / 2;
         const centerY = totalHeight / 2;
 
-        // Create score line rectangle (the envelope size)
+        // Create the cut lines (perimeter with flaps) - goes behind score lines
+        this.createCutLines(svg, pixelWidth, pixelHeight, pixelFlapHeight, centerX);
+
+        // Create score line rectangle (the envelope size) - goes on top
         const scoreRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-        scoreRect.setAttribute('x', '0.5');
-        scoreRect.setAttribute('y', '0.5');
+        scoreRect.setAttribute('x', pixelFlapHeight + 0.5);
+        scoreRect.setAttribute('y', pixelFlapHeight + 0.5);
         scoreRect.setAttribute('width', pixelWidth);
         scoreRect.setAttribute('height', pixelHeight);
         scoreRect.setAttribute('stroke', '#000');
@@ -149,6 +152,51 @@ class EnvelopeGenerator {
             totalWidth: totalWidth / dpi,
             totalHeight: totalHeight / dpi
         };
+    }
+
+    createCutLines(svg, pixelWidth, pixelHeight, pixelFlapHeight, centerX) {
+        // Create the cut lines (perimeter with flaps) as a single solid path
+        const cutPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        
+        // Calculate the score rectangle corners (where we start and end)
+        const scoreLeft = pixelFlapHeight;
+        const scoreTop = pixelFlapHeight;
+        const scoreRight = scoreLeft + pixelWidth;
+        const scoreBottom = scoreTop + pixelHeight;
+        
+        // Build the cut path following your description:
+        // Start at upper left corner of score line
+        let cutPathData = `M ${scoreLeft} ${scoreTop}`;
+        
+        // Go up and over to make the top flap (triangular)
+        cutPathData += ` L ${centerX} ${scoreTop - pixelFlapHeight}`; // To top point
+        cutPathData += ` L ${scoreRight} ${scoreTop}`; // Back to upper right corner of score line
+        
+        // Go out and down for the right flap
+        cutPathData += ` L ${scoreRight + pixelFlapHeight} ${scoreTop}`; // Out to right edge
+        cutPathData += ` L ${scoreRight + pixelFlapHeight} ${scoreBottom}`; // Down to bottom
+        cutPathData += ` L ${scoreRight} ${scoreBottom}`; // Back to lower right corner of score line
+        
+        // Go out and down for the bottom flap
+        cutPathData += ` L ${scoreRight} ${scoreBottom + pixelFlapHeight}`; // Down to bottom edge
+        cutPathData += ` L ${scoreLeft} ${scoreBottom + pixelFlapHeight}`; // Across to left
+        cutPathData += ` L ${scoreLeft} ${scoreBottom}`; // Back to lower left corner of score line
+        
+        // Go out and up for the left flap
+        cutPathData += ` L ${scoreLeft - pixelFlapHeight} ${scoreBottom}`; // Out to left edge
+        cutPathData += ` L ${scoreLeft - pixelFlapHeight} ${scoreTop}`; // Up to top
+        cutPathData += ` L ${scoreLeft} ${scoreTop}`; // Back to upper left corner of score line
+        
+        // Close the path
+        cutPathData += ` Z`;
+        
+        cutPath.setAttribute('d', cutPathData);
+        cutPath.setAttribute('stroke', '#000');
+        cutPath.setAttribute('stroke-width', '1');
+        cutPath.setAttribute('fill', 'none');
+        
+        // Add the cut path to the SVG (this will be behind the score lines)
+        svg.appendChild(cutPath);
     }
 
 
