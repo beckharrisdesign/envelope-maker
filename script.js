@@ -88,8 +88,10 @@ class EnvelopeGenerator {
         }
 
         // Calculate template dimensions (envelope size + flaps)
-        const totalWidth = pixelWidth + (2 * pixelFlapHeight); // Left and right flaps
-        const totalHeight = pixelHeight + (2 * pixelFlapHeight); // Top and bottom flaps
+        const sideFlapDepth = pixelFlapHeight / 2; // Half depth for side flaps
+        const topFlapDepth = pixelFlapHeight; // Full depth for top flap
+        const totalWidth = pixelWidth + (2 * sideFlapDepth); // Left and right flaps (half depth)
+        const totalHeight = pixelHeight + topFlapDepth + sideFlapDepth; // Top flap (full) + bottom flap (half)
 
         // Create SVG
         const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -119,8 +121,8 @@ class EnvelopeGenerator {
 
         // Create score line rectangle (the envelope size) - goes on top
         const scoreRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-        scoreRect.setAttribute('x', pixelFlapHeight + 0.5);
-        scoreRect.setAttribute('y', pixelFlapHeight + 0.5);
+        scoreRect.setAttribute('x', sideFlapDepth + 0.5);
+        scoreRect.setAttribute('y', topFlapDepth + 0.5);
         scoreRect.setAttribute('width', pixelWidth);
         scoreRect.setAttribute('height', pixelHeight);
         scoreRect.setAttribute('stroke', '#000');
@@ -158,33 +160,38 @@ class EnvelopeGenerator {
         // Create the cut lines (perimeter with flaps) as a single solid path
         const cutPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         
+        // Calculate flap depths
+        const topFlapDepth = pixelFlapHeight; // Full depth for top flap
+        const sideFlapDepth = pixelFlapHeight / 2; // Half depth for side/bottom flaps
+        
         // Calculate the score rectangle corners (where we start and end)
-        const scoreLeft = pixelFlapHeight;
-        const scoreTop = pixelFlapHeight;
+        const scoreLeft = sideFlapDepth;
+        const scoreTop = topFlapDepth;
         const scoreRight = scoreLeft + pixelWidth;
         const scoreBottom = scoreTop + pixelHeight;
         
-        // Build the cut path following your description:
+        // Build the cut path:
         // Start at upper left corner of score line
         let cutPathData = `M ${scoreLeft} ${scoreTop}`;
         
-        // Go up and over to make the top flap (triangular)
-        cutPathData += ` L ${centerX} ${scoreTop - pixelFlapHeight}`; // To top point
+        // Top flap (rectangular, full depth)
+        cutPathData += ` L ${scoreLeft} ${scoreTop - topFlapDepth}`; // Up to top edge
+        cutPathData += ` L ${scoreRight} ${scoreTop - topFlapDepth}`; // Across to top right
         cutPathData += ` L ${scoreRight} ${scoreTop}`; // Back to upper right corner of score line
         
-        // Go out and down for the right flap
-        cutPathData += ` L ${scoreRight + pixelFlapHeight} ${scoreTop}`; // Out to right edge
-        cutPathData += ` L ${scoreRight + pixelFlapHeight} ${scoreBottom}`; // Down to bottom
+        // Right flap (rectangular, half depth)
+        cutPathData += ` L ${scoreRight + sideFlapDepth} ${scoreTop}`; // Out to right edge
+        cutPathData += ` L ${scoreRight + sideFlapDepth} ${scoreBottom}`; // Down to bottom
         cutPathData += ` L ${scoreRight} ${scoreBottom}`; // Back to lower right corner of score line
         
-        // Go out and down for the bottom flap
-        cutPathData += ` L ${scoreRight} ${scoreBottom + pixelFlapHeight}`; // Down to bottom edge
-        cutPathData += ` L ${scoreLeft} ${scoreBottom + pixelFlapHeight}`; // Across to left
+        // Bottom flap (rectangular, half depth)
+        cutPathData += ` L ${scoreRight} ${scoreBottom + sideFlapDepth}`; // Down to bottom edge
+        cutPathData += ` L ${scoreLeft} ${scoreBottom + sideFlapDepth}`; // Across to left
         cutPathData += ` L ${scoreLeft} ${scoreBottom}`; // Back to lower left corner of score line
         
-        // Go out and up for the left flap
-        cutPathData += ` L ${scoreLeft - pixelFlapHeight} ${scoreBottom}`; // Out to left edge
-        cutPathData += ` L ${scoreLeft - pixelFlapHeight} ${scoreTop}`; // Up to top
+        // Left flap (rectangular, half depth)
+        cutPathData += ` L ${scoreLeft - sideFlapDepth} ${scoreBottom}`; // Out to left edge
+        cutPathData += ` L ${scoreLeft - sideFlapDepth} ${scoreTop}`; // Up to top
         cutPathData += ` L ${scoreLeft} ${scoreTop}`; // Back to upper left corner of score line
         
         // Close the path
