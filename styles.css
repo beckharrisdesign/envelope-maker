@@ -41,24 +41,27 @@ main {
     box-shadow: 0 20px 40px rgba(0,0,0,0.1);
 }
 
-.input-section h2 {
+.main-layout {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 40px;
+    align-items: start;
+}
+
+.size-column h2 {
     color: #4a5568;
     margin-bottom: 30px;
     font-size: 1.8rem;
 }
 
-.size-options h3,
-.custom-dimensions h3 {
-    color: #2d3748;
-    margin-bottom: 20px;
-    font-size: 1.3rem;
+.preview-column {
+    min-height: 400px;
 }
 
 .standard-sizes {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    display: flex;
+    flex-direction: column;
     gap: 15px;
-    margin-bottom: 40px;
 }
 
 .size-btn {
@@ -146,15 +149,9 @@ main {
 }
 
 .preview-section {
-    margin-top: 40px;
-    padding-top: 40px;
+    margin-top: 30px;
+    padding-top: 30px;
     border-top: 2px solid #e2e8f0;
-}
-
-.preview-section h2 {
-    color: #4a5568;
-    margin-bottom: 30px;
-    font-size: 1.8rem;
 }
 
 .preview-container {
@@ -163,11 +160,12 @@ main {
     padding: 30px;
     margin-bottom: 30px;
     text-align: center;
-    min-height: 300px;
+    min-height: 400px;
     display: flex;
     align-items: center;
     justify-content: center;
     border: 2px dashed #cbd5e0;
+    position: relative;
 }
 
 #svg-preview {
@@ -184,19 +182,20 @@ main {
 }
 
 .download-buttons {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
     display: flex;
-    gap: 20px;
-    justify-content: center;
-    margin-bottom: 20px;
+    gap: 10px;
 }
 
 .download-btn {
     background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
     color: white;
     border: none;
-    padding: 12px 30px;
-    border-radius: 12px;
-    font-size: 1rem;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.9rem;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;

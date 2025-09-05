@@ -12,11 +12,6 @@ class EnvelopeGenerator {
             });
         });
 
-        // Generate button
-        document.getElementById('generate-btn').addEventListener('click', () => {
-            this.generateTemplate();
-        });
-
         // Download buttons
         document.getElementById('download-svg').addEventListener('click', () => {
             this.downloadSVG();
@@ -25,67 +20,76 @@ class EnvelopeGenerator {
         document.getElementById('download-pdf').addEventListener('click', () => {
             this.downloadPDF();
         });
-
-        // Input validation
-        const inputs = document.querySelectorAll('#width, #height, #flap-height');
-        inputs.forEach(input => {
-            input.addEventListener('input', () => {
-                this.clearStandardSelection();
-            });
-        });
     }
 
     selectStandardSize(button) {
-        // Clear previous selections
-        document.querySelectorAll('.size-btn').forEach(btn => {
-            btn.classList.remove('selected');
-        });
+        try {
+            // Clear previous selections
+            document.querySelectorAll('.size-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
 
-        // Select current button
-        button.classList.add('selected');
+            // Select current button
+            button.classList.add('selected');
 
-        // Fill in the dimensions
-        const width = parseFloat(button.dataset.width);
-        const height = parseFloat(button.dataset.height);
-        
-        document.getElementById('width').value = width;
-        document.getElementById('height').value = height;
-        
-        // Auto-generate template
-        this.generateTemplate();
-    }
-
-    clearStandardSelection() {
-        document.querySelectorAll('.size-btn').forEach(btn => {
-            btn.classList.remove('selected');
-        });
-    }
-
-    generateTemplate() {
-        const width = parseFloat(document.getElementById('width').value);
-        const height = parseFloat(document.getElementById('height').value);
-        const flapHeight = parseFloat(document.getElementById('flap-height').value) || 1.5;
-
-        if (!width || !height || width <= 0 || height <= 0) {
-            alert('Please enter valid width and height dimensions.');
-            return;
+            // Get the dimensions from the button
+            const width = parseFloat(button.dataset.width);
+            const height = parseFloat(button.dataset.height);
+            
+            console.log('Selected envelope size:', { width, height, name: button.dataset.name });
+            
+            // Generate template directly
+            this.generateTemplateFromDimensions(width, height);
+        } catch (error) {
+            console.error('Error selecting standard size:', error);
+            alert('Error generating template. Please try again.');
         }
+    }
 
-        this.currentTemplate = this.createEnvelopeTemplate(width, height, flapHeight);
-        this.showPreview();
+    generateTemplateFromDimensions(width, height) {
+        try {
+            // Validate dimensions
+            if (!width || !height || isNaN(width) || isNaN(height) || width <= 0 || height <= 0) {
+                console.error('Invalid dimensions:', { width, height });
+                alert('Invalid envelope dimensions. Please try again.');
+                return;
+            }
+
+            // Use default flap height for now
+            const flapHeight = 1.5;
+
+            this.currentTemplate = this.createEnvelopeTemplate(width, height, flapHeight);
+            this.showPreview();
+        } catch (error) {
+            console.error('Error generating template:', error);
+            alert('Error generating template. Please try again.');
+        }
     }
 
     createEnvelopeTemplate(width, height, flapHeight) {
+        // Validate all parameters
+        if (!width || !height || !flapHeight || 
+            isNaN(width) || isNaN(height) || isNaN(flapHeight) ||
+            width <= 0 || height <= 0 || flapHeight <= 0) {
+            console.error('Invalid template parameters:', { width, height, flapHeight });
+            throw new Error('Invalid template parameters');
+        }
+
         // Convert inches to pixels (72 DPI for print quality)
         const dpi = 72;
         const pixelWidth = width * dpi;
         const pixelHeight = height * dpi;
         const pixelFlapHeight = flapHeight * dpi;
 
-        // Calculate total template dimensions
-        // The template includes the envelope body plus flaps on all sides
-        const totalWidth = pixelWidth + (2 * pixelFlapHeight); // Left and right flaps
-        const totalHeight = pixelHeight + (2 * pixelFlapHeight); // Top and bottom flaps
+        // Validate pixel dimensions
+        if (isNaN(pixelWidth) || isNaN(pixelHeight) || isNaN(pixelFlapHeight)) {
+            console.error('Invalid pixel dimensions:', { pixelWidth, pixelHeight, pixelFlapHeight });
+            throw new Error('Invalid pixel dimensions');
+        }
+
+        // Calculate template dimensions (just the envelope size)
+        const totalWidth = pixelWidth;
+        const totalHeight = pixelHeight;
 
         // Create SVG
         const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -99,7 +103,7 @@ class EnvelopeGenerator {
         const style = document.createElementNS('http://www.w3.org/2000/svg', 'style');
         style.textContent = `
             .cut-line { stroke: #000; stroke-width: 1; fill: none; }
-            .fold-line { stroke: #000; stroke-width: 0.5; fill: none; stroke-dasharray: 3,3; }
+            .fold-line { stroke: #666; stroke-width: 0.5; fill: none; stroke-dasharray: 8,4; }
             .envelope-body { fill: none; stroke: #000; stroke-width: 1; }
             .label-text { font-family: Arial, sans-serif; font-size: 12px; fill: #666; }
         `;
@@ -109,98 +113,22 @@ class EnvelopeGenerator {
         // Calculate positions
         const centerX = totalWidth / 2;
         const centerY = totalHeight / 2;
-        const bodyLeft = pixelFlapHeight;
-        const bodyTop = pixelFlapHeight;
-        const bodyRight = bodyLeft + pixelWidth;
-        const bodyBottom = bodyTop + pixelHeight;
 
-        // Main envelope body (rectangle)
-        const body = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-        body.setAttribute('x', bodyLeft);
-        body.setAttribute('y', bodyTop);
-        body.setAttribute('width', pixelWidth);
-        body.setAttribute('height', pixelHeight);
-        body.setAttribute('class', 'envelope-body');
-        svg.appendChild(body);
-
-        // Top flap (triangular)
-        const topFlap = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-        const topFlapPoints = [
-            [bodyLeft, bodyTop],
-            [centerX, bodyTop - pixelFlapHeight],
-            [bodyRight, bodyTop]
-        ].map(point => point.join(',')).join(' ');
-        topFlap.setAttribute('points', topFlapPoints);
-        topFlap.setAttribute('class', 'cut-line');
-        svg.appendChild(topFlap);
-
-        // Bottom flap (rectangular)
-        const bottomFlap = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-        bottomFlap.setAttribute('x', bodyLeft);
-        bottomFlap.setAttribute('y', bodyBottom);
-        bottomFlap.setAttribute('width', pixelWidth);
-        bottomFlap.setAttribute('height', pixelFlapHeight);
-        bottomFlap.setAttribute('class', 'cut-line');
-        svg.appendChild(bottomFlap);
-
-        // Left flap (rectangular)
-        const leftFlap = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-        leftFlap.setAttribute('x', 0);
-        leftFlap.setAttribute('y', bodyTop);
-        leftFlap.setAttribute('width', pixelFlapHeight);
-        leftFlap.setAttribute('height', pixelHeight);
-        leftFlap.setAttribute('class', 'cut-line');
-        svg.appendChild(leftFlap);
-
-        // Right flap (rectangular)
-        const rightFlap = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-        rightFlap.setAttribute('x', bodyRight);
-        rightFlap.setAttribute('y', bodyTop);
-        rightFlap.setAttribute('width', pixelFlapHeight);
-        rightFlap.setAttribute('height', pixelHeight);
-        rightFlap.setAttribute('class', 'cut-line');
-        svg.appendChild(rightFlap);
-
-        // Fold lines
-        // Vertical fold lines (left and right edges of main body)
-        const leftFoldLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        leftFoldLine.setAttribute('x1', bodyLeft);
-        leftFoldLine.setAttribute('y1', 0);
-        leftFoldLine.setAttribute('x2', bodyLeft);
-        leftFoldLine.setAttribute('y2', totalHeight);
-        leftFoldLine.setAttribute('class', 'fold-line');
-        svg.appendChild(leftFoldLine);
-
-        const rightFoldLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        rightFoldLine.setAttribute('x1', bodyRight);
-        rightFoldLine.setAttribute('y1', 0);
-        rightFoldLine.setAttribute('x2', bodyRight);
-        rightFoldLine.setAttribute('y2', totalHeight);
-        rightFoldLine.setAttribute('class', 'fold-line');
-        svg.appendChild(rightFoldLine);
-
-        // Horizontal fold lines (top and bottom edges of main body)
-        const topFoldLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        topFoldLine.setAttribute('x1', 0);
-        topFoldLine.setAttribute('y1', bodyTop);
-        topFoldLine.setAttribute('x2', totalWidth);
-        topFoldLine.setAttribute('y2', bodyTop);
-        topFoldLine.setAttribute('class', 'fold-line');
-        svg.appendChild(topFoldLine);
-
-        const bottomFoldLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        bottomFoldLine.setAttribute('x1', 0);
-        bottomFoldLine.setAttribute('y1', bodyBottom);
-        bottomFoldLine.setAttribute('x2', totalWidth);
-        bottomFoldLine.setAttribute('y2', bodyBottom);
-        bottomFoldLine.setAttribute('class', 'fold-line');
-        svg.appendChild(bottomFoldLine);
+        // Create score line rectangle (the envelope size)
+        const scoreRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        scoreRect.setAttribute('x', '0.5');
+        scoreRect.setAttribute('y', '0.5');
+        scoreRect.setAttribute('width', pixelWidth);
+        scoreRect.setAttribute('height', pixelHeight);
+        scoreRect.setAttribute('stroke', '#000');
+        scoreRect.setAttribute('stroke-linecap', 'round');
+        scoreRect.setAttribute('stroke-dasharray', '2 4');
+        scoreRect.setAttribute('fill', 'none');
+        svg.appendChild(scoreRect);
 
         // Add labels
         const labels = [
-            { text: 'TOP', x: centerX, y: bodyTop - pixelFlapHeight/2 + 5, anchor: 'middle' },
-            { text: `${width}" × ${height}" envelope`, x: centerX, y: centerY, anchor: 'middle' },
-            { text: 'fold', x: totalWidth - 30, y: 15, anchor: 'start', class: 'fold-line' }
+            { text: `${width}" × ${height}" envelope`, x: centerX, y: centerY, anchor: 'middle' }
         ];
 
         labels.forEach(label => {
@@ -213,15 +141,6 @@ class EnvelopeGenerator {
             svg.appendChild(text);
         });
 
-        // Add fold line legend
-        const legendLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        legendLine.setAttribute('x1', totalWidth - 80);
-        legendLine.setAttribute('y1', 10);
-        legendLine.setAttribute('x2', totalWidth - 40);
-        legendLine.setAttribute('y2', 10);
-        legendLine.setAttribute('class', 'fold-line');
-        svg.appendChild(legendLine);
-
         return {
             svg: svg,
             width: width,
@@ -231,6 +150,7 @@ class EnvelopeGenerator {
             totalHeight: totalHeight / dpi
         };
     }
+
 
     showPreview() {
         const previewSection = document.getElementById('preview-section');
