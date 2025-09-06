@@ -16,7 +16,6 @@
         <main>
             <div class="main-layout">
                 <div class="size-column">
-                    <h2>Choose Your Envelope Size</h2>
                     <div class="size-options">
                         <div class="standard-sizes">
                             <button class="size-btn" data-width="2.5" data-height="4.25" data-name="#3 Seed Envelope">
@@ -31,6 +30,47 @@
                             <button class="size-btn" data-width="3.375" data-height="6" data-name="#6 Seed Envelope">
                                 #6 Seed Envelope<br><small>3⅜" × 6"</small>
                             </button>
+                        </div>
+                    </div>
+
+                    <div class="flap-controls">
+                        <h3>Flap Options</h3>
+                        
+                        <div class="control-group">
+                            <label for="flap-height">Flap Height:</label>
+                            <div class="slider-container">
+                                <input type="range" id="flap-height" min="0.5" max="3" step="0.25" value="1.5">
+                                <span id="flap-height-value">1.5"</span>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label>Flap Style:</label>
+                            <div class="flap-style-buttons">
+                                <button class="flap-style-btn active" data-style="square" title="Square Flaps">
+                                    <div class="flap-icon square-icon"></div>
+                                    <span>Square</span>
+                                </button>
+                                <button class="flap-style-btn" data-style="pointed" title="Pointed Flaps">
+                                    <div class="flap-icon pointed-icon"></div>
+                                    <span>Pointed</span>
+                                </button>
+                                <button class="flap-style-btn" data-style="rounded" title="Rounded Flaps">
+                                    <div class="flap-icon rounded-icon"></div>
+                                    <span>Rounded</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="overlap-amount">Side Flap Overlap:</label>
+                            <div class="slider-container">
+                                <input type="range" id="overlap-amount" min="0.25" max="1" step="0.125" value="0.5">
+                                <span id="overlap-amount-value">0.5"</span>
+                            </div>
+                            <small class="overlap-warning" id="overlap-warning" style="display: none; color: #e53e3e; font-size: 0.8rem;">
+                                Overlap limited to prevent excessive template size
+                            </small>
                         </div>
                     </div>
                 </div>

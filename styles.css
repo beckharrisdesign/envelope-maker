@@ -19,18 +19,18 @@ body {
 
 header {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     color: white;
 }
 
 header h1 {
-    font-size: 2.5rem;
-    margin-bottom: 10px;
+    font-size: 2rem;
+    margin-bottom: 5px;
     text-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
 header p {
-    font-size: 1.1rem;
+    font-size: 1rem;
     opacity: 0.9;
 }
 
@@ -48,11 +48,6 @@ main {
     align-items: start;
 }
 
-.size-column h2 {
-    color: #4a5568;
-    margin-bottom: 30px;
-    font-size: 1.8rem;
-}
 
 .preview-column {
     min-height: 400px;
@@ -90,6 +85,167 @@ main {
 .size-btn small {
     opacity: 0.9;
     font-size: 0.85rem;
+}
+
+.flap-controls {
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 2px solid #e2e8f0;
+}
+
+.flap-controls h3 {
+    color: #4a5568;
+    margin-bottom: 20px;
+    font-size: 1.4rem;
+}
+
+.control-group {
+    margin-bottom: 20px;
+}
+
+.control-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #4a5568;
+    font-size: 0.95rem;
+}
+
+.slider-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.slider-container input[type="range"] {
+    flex: 1;
+    height: 6px;
+    border-radius: 3px;
+    background: #e2e8f0;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.slider-container input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #667eea;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
+}
+
+.slider-container input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #667eea;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
+}
+
+.slider-container span {
+    min-width: 40px;
+    text-align: center;
+    font-weight: 500;
+    color: #4a5568;
+    font-size: 0.9rem;
+}
+
+.control-group select {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: white;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.control-group select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.flap-style-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.flap-style-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 8px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #4a5568;
+}
+
+.flap-style-btn:hover {
+    border-color: #667eea;
+    background: #f7fafc;
+    transform: translateY(-1px);
+}
+
+.flap-style-btn.active {
+    border-color: #667eea;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.flap-icon {
+    width: 24px;
+    height: 16px;
+    border: 2px solid currentColor;
+    border-radius: 2px;
+    position: relative;
+}
+
+.square-icon {
+    /* Square flaps - no special styling needed */
+}
+
+.pointed-icon::after {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-bottom: 6px solid currentColor;
+}
+
+.rounded-icon {
+    border-radius: 8px;
+}
+
+.rounded-icon::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: 2px;
+    right: 2px;
+    height: 4px;
+    background: currentColor;
+    border-radius: 2px;
 }
 
 .dimension-inputs {
@@ -149,9 +305,8 @@ main {
 }
 
 .preview-section {
-    margin-top: 30px;
-    padding-top: 30px;
-    border-top: 2px solid #e2e8f0;
+    margin-top: 0;
+    padding-top: 0;
 }
 
 .preview-container {
