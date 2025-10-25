@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing - SeedEnvelope Pro</title>
+    <link rel="stylesheet" href="design-system.css">
+    <style>
+        .pricing-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        .pricing-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        .pricing-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+        .pricing-card {
+            background: white;
+            border-radius: 20px;
+            padding: 60px 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            position: relative;
+            border: 3px solid #667eea;
+        }
+        .popular-badge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            padding: 8px 24px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .plan-name {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 20px;
+        }
+        .price {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+        .price-period {
+            font-size: 1.2rem;
+            color: #718096;
+        }
+        .features-list {
+            list-style: none;
+            padding: 0;
+            margin: 40px 0;
+            text-align: left;
+        }
+        .features-list li {
+            padding: 12px 0;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .features-list li:last-child {
+            border-bottom: none;
+        }
+        .features-list li:before {
+            content: "✓";
+            color: #48bb78;
+            font-weight: bold;
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+        .subscribe-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+        }
+        .subscribe-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
+        }
+        .guarantee {
+            text-align: center;
+            margin-top: 40px;
+            color: #718096;
+            font-style: italic;
+        }
+        /* Etsy-inspired Design System */
+        :root {
+            --etsy-orange: #F16521;
+            --etsy-orange-light: #FF6B35;
+            --etsy-brown: #8B4513;
+            --etsy-green: #4A7C59;
+            --etsy-cream: #F5F5DC;
+            --etsy-gray: #6B6B6B;
+            --etsy-light-gray: #F8F8F8;
+            --etsy-dark-gray: #333333;
+            --etsy-white: #FFFFFF;
+            --etsy-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --etsy-shadow-hover: 0 4px 16px rgba(0,0,0,0.15);
+        }
+        
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--etsy-light-gray);
+            color: var(--etsy-dark-gray);
+            line-height: 1.6;
+        }
+        
+        .pricing-hero {
+            background: var(--etsy-white);
+            padding: 60px 20px;
+            text-align: center;
+            border-bottom: 1px solid #E5E5E5;
+        }
+        
+        .pricing-hero h1 {
+            font-size: 2.5rem;
+            color: var(--etsy-dark-gray);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .pricing-hero p {
+            font-size: 1.2rem;
+            color: var(--etsy-gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .pricing-card {
+            background: var(--etsy-white);
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: var(--etsy-shadow);
+            text-align: center;
+            max-width: 500px;
+            margin: 40px auto;
+            border: 1px solid #E5E5E5;
+        }
+        
+        .pricing-card h2 {
+            font-size: 2rem;
+            color: var(--etsy-dark-gray);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .price {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--etsy-orange);
+            margin: 20px 0;
+        }
+        
+        .price-period {
+            font-size: 1.1rem;
+            color: var(--etsy-gray);
+            margin-bottom: 30px;
+        }
+        
+        .benefits-list {
+            list-style: none;
+            padding: 0;
+            margin: 30px 0;
+            text-align: left;
+        }
+        
+        .benefits-list li {
+            padding: 10px 0;
+            color: var(--etsy-gray);
+            font-size: 1rem;
+        }
+        
+        .benefits-list li:before {
+            content: "✓";
+            color: var(--etsy-green);
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .subscribe-button {
+            background: var(--etsy-orange);
+            color: var(--etsy-white);
+            padding: 16px 32px;
+            border: none;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: var(--etsy-shadow);
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        .subscribe-button:hover {
+            background: var(--etsy-orange-light);
+            transform: translateY(-1px);
+            box-shadow: var(--etsy-shadow-hover);
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 40px;
+            color: var(--etsy-orange);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container">
+            <a href="/" class="nav-brand">🌱 SeedEnvelope Pro</a>
+            <div class="nav-buttons" id="nav-buttons">
+                <!-- Logged out state -->
+                <div id="logged-out-nav" style="display: block;">
+                    <button id="login-btn" class="btn btn-primary">Login</button>
+                    <a href="/pricing" class="btn btn-secondary">Get Started</a>
+                </div>
+                <!-- Logged in state -->
+                <div id="logged-in-nav" style="display: none;">
+                    <span id="user-info" style="margin-right: 20px; color: var(--etsy-dark-gray); font-weight: 500;"></span>
+                    <a href="/generator" class="btn btn-primary">Generator</a>
+                    <button id="logout-btn" class="btn btn-danger">Logout</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <a href="landing.html" class="back-link">← Back to Home</a>
+        </div>
+        
+        <div class="pricing-hero">
+            <h1>Choose Your Plan</h1>
+            <p>Start creating professional seed envelope templates today</p>
+        </div>
+
+        <div class="pricing-container">
+            <div class="pricing-card">
+                <div class="popular-badge">Most Popular</div>
+                <div class="plan-name">SeedEnvelope Pro</div>
+                <div class="price">$20<span class="price-period">/year</span></div>
+                
+                <ul class="features-list">
+                    <li>Unlimited template generation</li>
+                    <li>All 4 standard seed envelope sizes (#3, #4.5, #5, #6)</li>
+                    <li>3 flap styles: Square, Pointed, Rounded</li>
+                    <li>Customizable flap height and overlap</li>
+                    <li>SVG export for cutting machines</li>
+                    <li>PDF export for printing</li>
+                    <li>Real-time preview</li>
+                    <li>Professional 72 DPI quality</li>
+                    <li>Optimized for xTool M1 Ultra & Cricut</li>
+                    <li>No watermarks or limitations</li>
+                    <li>Cancel anytime</li>
+                    <li>Email support</li>
+                </ul>
+
+                <button class="subscribe-button" onclick="startSubscription()">
+                    Subscribe Now - $20/year
+                </button>
+                
+                <div class="guarantee">
+                    30-day money-back guarantee. Cancel anytime.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Session-Aware Header JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔍 Pricing page: DOMContentLoaded fired');
+            
+            // Check auth status and update header
+            checkAuthStatus();
+            
+            // Add login button handler
+            const loginBtn = document.getElementById('login-btn');
+            if (loginBtn) {
+                loginBtn.addEventListener('click', function(e) {
+                    console.log('🔍 Login button clicked!');
+                    e.preventDefault();
+                    
+                    fetch('/auth-status', { credentials: 'include' })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.authenticated) {
+                                window.location.href = '/generator';
+                            } else {
+                                window.location.href = '/login';
+                            }
+                        });
+                });
+            }
+            
+            // Add logout button handler
+            const logoutBtn = document.getElementById('logout-btn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function(e) {
+                    console.log('🔍 Logout button clicked!');
+                    e.preventDefault();
+                    
+                    fetch('/logout', { method: 'POST', credentials: 'include' })
+                        .then(() => {
+                            window.location.href = '/';
+                        });
+                });
+            }
+        });
+        
+        // Check authentication status and update header
+        async function checkAuthStatus() {
+            try {
+                const response = await fetch('/auth-status', { credentials: 'include' });
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('🔍 Auth status:', data);
+                    
+                    if (data.authenticated) {
+                        // User is logged in
+                        document.getElementById('logged-out-nav').style.display = 'none';
+                        document.getElementById('logged-in-nav').style.display = 'block';
+                        
+                        const userInfo = document.getElementById('user-info');
+                        if (data.subscriptionDate) {
+                            const date = new Date(data.subscriptionDate);
+                            userInfo.textContent = `Pro User (since ${date.toLocaleDateString()})`;
+                        } else {
+                            userInfo.textContent = 'Pro User';
+                        }
+                    } else {
+                        // User is not logged in
+                        document.getElementById('logged-out-nav').style.display = 'block';
+                        document.getElementById('logged-in-nav').style.display = 'none';
+                    }
+                }
+            } catch (error) {
+                console.error('Error checking auth status:', error);
+                // Default to logged out state
+                document.getElementById('logged-out-nav').style.display = 'block';
+                document.getElementById('logged-in-nav').style.display = 'none';
+            }
+        }
+    </script>
+    
+    <!-- Stripe Integration -->
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        // Stripe Configuration - Loaded from server
+        // =========================================
+        let stripe;
+        let STRIPE_PRICE_ID;
+        
+        // Load configuration from server
+        async function loadStripeConfig() {
+            try {
+                const response = await fetch('/stripe-config');
+                const config = await response.json();
+                
+                // Initialize Stripe with server-provided key
+                stripe = Stripe(config.publishableKey);
+                STRIPE_PRICE_ID = config.priceId;
+                
+                console.log('Stripe configuration loaded:', {
+                    publishableKey: config.publishableKey.substring(0, 20) + '...',
+                    priceId: config.priceId
+                });
+            } catch (error) {
+                console.error('Failed to load Stripe configuration:', error);
+                alert('Failed to load payment configuration. Please refresh the page.');
+            }
+        }
+        
+        // Load configuration when page loads
+        loadStripeConfig();
+        
+        async function startSubscription() {
+            try {
+                // Show loading state
+                const button = document.querySelector('.subscribe-button');
+                const originalText = button.textContent;
+                button.textContent = 'Processing...';
+                button.disabled = true;
+                
+                // Create checkout session
+                const response = await fetch('/create-checkout-session', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        priceId: STRIPE_PRICE_ID, // Uses the configured price ID
+                        successUrl: window.location.origin + '/generator.html?success=true',
+                        cancelUrl: window.location.origin + '/pricing.html?canceled=true'
+                    })
+                });
+                
+                const session = await response.json();
+                
+                // Redirect to Stripe Checkout
+                const result = await stripe.redirectToCheckout({
+                    sessionId: session.id
+                });
+                
+                if (result.error) {
+                    alert(result.error.message);
+                    button.textContent = originalText;
+                    button.disabled = false;
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Something went wrong. Please try again.');
+                const button = document.querySelector('.subscribe-button');
+                button.textContent = 'Subscribe Now - $20/year';
+                button.disabled = false;
+            }
+        }
+        
+        // Check for success/cancel parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('success') === 'true') {
+            alert('Payment successful! Redirecting to generator...');
+            window.location.href = 'generator.html';
+        } else if (urlParams.get('canceled') === 'true') {
+            alert('Payment canceled. You can try again anytime.');
+        }
+
+    </script>
+
+</body>
+</html>

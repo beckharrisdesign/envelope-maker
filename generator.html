@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator - SeedEnvelope Pro</title>
+    <link rel="stylesheet" href="design-system.css">
+    <style>
+        .subscription-required {
+            background: linear-gradient(135deg, var(--etsy-orange) 0%, var(--etsy-orange-light) 100%);
+            color: var(--etsy-white);
+            padding: var(--space-4xl) var(--space-lg);
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .subscription-card {
+            background: var(--etsy-white);
+            color: var(--etsy-dark-gray);
+            padding: var(--space-4xl);
+            border-radius: var(--radius-md);
+            box-shadow: var(--etsy-shadow-hover);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .subscription-card h1 {
+            font-size: var(--font-size-4xl);
+            margin-bottom: var(--space-lg);
+            color: var(--etsy-dark-gray);
+        }
+        .subscription-card p {
+            font-size: var(--font-size-lg);
+            margin-bottom: var(--space-2xl);
+            color: var(--etsy-gray);
+        }
+        .generator-content {
+            display: none;
+        }
+        .user-info {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .user-email {
+            font-weight: 500;
+            color: #2d3748;
+        }
+        .logout-button {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .logout-button:hover {
+            background: #c53030;
+        }
+    </style>
+</head>
+<body>
+    <!-- Subscription Required Screen -->
+    <div id="subscription-required" class="subscription-required">
+        <div class="subscription-card">
+            <h1>🌱 Subscription Required</h1>
+            <p>You need an active subscription to access the SeedEnvelope Pro generator.</p>
+            <a href="pricing.html" class="btn btn-primary">Subscribe Now - $20/year</a>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container">
+            <a href="/" class="nav-brand">🌱 SeedEnvelope Pro</a>
+            <div class="nav-buttons" id="nav-buttons">
+                <!-- Logged out state -->
+                <div id="logged-out-nav" style="display: none;">
+                    <button id="login-btn" class="btn btn-primary">Login</button>
+                    <a href="/pricing" class="btn btn-secondary">Get Started</a>
+                </div>
+                <!-- Logged in state -->
+                <div id="logged-in-nav" style="display: block;">
+                    <span id="user-info" style="margin-right: 20px; color: var(--etsy-dark-gray); font-weight: 500;">Pro User</span>
+                    <a href="/generator" class="btn btn-primary">Generator</a>
+                    <button id="logout-btn" class="btn btn-danger">Logout</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Generator Content (Hidden until subscription verified) -->
+    <div id="generator-content" class="generator-content">
+
+        <!-- Your existing generator content -->
+        <header class="text-center mb-xl">
+            <h1>🌱 Seed Envelope Template Generator</h1>
+            <p>Create seed envelope templates for your Cricut or xTool vinyl cutter</p>
+            <small style="opacity: 0.7;">v1.0.0 - Pro Subscription Active</small>
+        </header>
+
+        <main class="section">
+            <div class="container">
+                <div class="grid grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Envelope Size</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="standard-sizes">
+                            <button class="size-btn" data-width="2.5" data-height="4.25" data-name="#3 Seed Envelope">
+                                #3 Seed Envelope<br><small>2½" × 4¼"</small>
+                            </button>
+                            <button class="size-btn" data-width="3" data-height="4.875" data-name="#4.5 Seed Envelope">
+                                #4.5 Seed Envelope<br><small>3" × 4⅞"</small>
+                            </button>
+                            <button class="size-btn" data-width="2.875" data-height="5.25" data-name="#5 Seed Envelope">
+                                #5 Seed Envelope<br><small>2⅞" × 5¼"</small>
+                            </button>
+                            <button class="size-btn" data-width="3.375" data-height="6" data-name="#6 Seed Envelope">
+                                #6 Seed Envelope<br><small>3⅜" × 6"</small>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card mt-lg">
+                        <div class="card-header">
+                            <h3>Flap Options</h3>
+                        </div>
+                        <div class="card-body">
+                        
+                        <div class="control-group">
+                            <label for="flap-height">Flap Height:</label>
+                            <div class="slider-container">
+                                <input type="range" id="flap-height" min="0.5" max="3" step="0.25" value="1.5">
+                                <span id="flap-height-value">1.5"</span>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label>Flap Style:</label>
+                            <div class="flap-style-buttons">
+                                <button class="flap-style-btn active" data-style="square" title="Square Flaps">
+                                    <div class="flap-icon square-icon"></div>
+                                    <span>Square</span>
+                                </button>
+                                <button class="flap-style-btn" data-style="pointed" title="Pointed Flaps">
+                                    <div class="flap-icon pointed-icon"></div>
+                                    <span>Pointed</span>
+                                </button>
+                                <button class="flap-style-btn" data-style="rounded" title="Rounded Flaps">
+                                    <div class="flap-icon rounded-icon"></div>
+                                    <span>Rounded</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="overlap-amount">Side Flap Overlap:</label>
+                            <div class="slider-container">
+                                <input type="range" id="overlap-amount" min="0.25" max="1" step="0.125" value="0.5">
+                                <span id="overlap-amount-value">0.5"</span>
+                            </div>
+                            <small class="overlap-warning" id="overlap-warning" style="display: none; color: #e53e3e; font-size: 0.8rem;">
+                                Overlap limited to prevent excessive template size
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Template Preview</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="preview-section" id="preview-section" style="display: none;">
+                            <div class="preview-container">
+                                <div id="svg-preview"></div>
+                                <div class="download-buttons">
+                                    <button id="download-svg" class="btn btn-primary">📄 Download SVG</button>
+                                    <button id="download-pdf" class="btn btn-secondary">📄 Download PDF</button>
+                                </div>
+                            </div>
+                            <div class="template-info">
+                                <p id="template-dimensions"></p>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Session-Aware Header JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔍 Generator page: DOMContentLoaded fired');
+            
+            // Check auth status and update header
+            checkAuthStatus();
+            
+            // Add logout button handler
+            const logoutBtn = document.getElementById('logout-btn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function(e) {
+                    console.log('🔍 Logout button clicked!');
+                    e.preventDefault();
+                    
+                    fetch('/logout', { method: 'POST', credentials: 'include' })
+                        .then(() => {
+                            window.location.href = '/';
+                        });
+                });
+            }
+        });
+        
+        // Check authentication status and update header
+        async function checkAuthStatus() {
+            try {
+                const response = await fetch('/auth-status', { credentials: 'include' });
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('🔍 Auth status:', data);
+                    
+                    if (data.authenticated) {
+                        // User is logged in
+                        document.getElementById('logged-out-nav').style.display = 'none';
+                        document.getElementById('logged-in-nav').style.display = 'block';
+                        
+                        const userInfo = document.getElementById('user-info');
+                        if (data.subscriptionDate) {
+                            const date = new Date(data.subscriptionDate);
+                            userInfo.textContent = `Pro User (since ${date.toLocaleDateString()})`;
+                        } else {
+                            userInfo.textContent = 'Pro User';
+                        }
+                    } else {
+                        // User is not logged in
+                        document.getElementById('logged-out-nav').style.display = 'block';
+                        document.getElementById('logged-in-nav').style.display = 'none';
+                    }
+                }
+            } catch (error) {
+                console.error('Error checking auth status:', error);
+                // Default to logged out state
+                document.getElementById('logged-out-nav').style.display = 'block';
+                document.getElementById('logged-in-nav').style.display = 'none';
+            }
+        }
+    </script>
+    
+    <!-- Include your existing script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="script.js"></script>
+    
+    <!-- Subscription Management Script -->
+    <script>
+        // Check subscription status on page load
+        document.addEventListener('DOMContentLoaded', async () => {
+            await checkSubscriptionStatus();
+        });
+
+        async function checkSubscriptionStatus() {
+            try {
+                // Check authentication status
+                const response = await fetch('/auth-status', {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.authenticated) {
+                        // Show generator content
+                        document.getElementById('subscription-required').style.display = 'none';
+                        document.getElementById('generator-content').style.display = 'block';
+                    } else {
+                        // Show subscription required
+                        document.getElementById('subscription-required').style.display = 'flex';
+                        document.getElementById('generator-content').style.display = 'none';
+                    }
+                } else {
+                    // Not authenticated or no subscription
+                    document.getElementById('subscription-required').style.display = 'flex';
+                    document.getElementById('generator-content').style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Error checking authentication:', error);
+                // Show subscription required on error
+                document.getElementById('subscription-required').style.display = 'flex';
+                document.getElementById('generator-content').style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
