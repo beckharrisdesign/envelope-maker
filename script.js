@@ -1,6 +1,9 @@
 class EnvelopeGenerator {
     constructor() {
         this.currentTemplate = null;
+        this.currentFlapHeight = 1.5;
+        this.currentFlapStyle = 'square';
+        this.currentOverlapAmount = 0.5;
         this.initializeEventListeners();
     }
 
@@ -10,6 +13,32 @@ class EnvelopeGenerator {
             btn.addEventListener('click', (e) => {
                 this.selectStandardSize(e.target);
             });
+        });
+
+        // Flap controls
+        document.getElementById('flap-height').addEventListener('input', (e) => {
+            this.currentFlapHeight = parseFloat(e.target.value);
+            document.getElementById('flap-height-value').textContent = e.target.value + '"';
+            this.regenerateTemplate();
+        });
+
+        // Flap style buttons
+        document.querySelectorAll('.flap-style-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                // Remove active class from all buttons
+                document.querySelectorAll('.flap-style-btn').forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                e.target.closest('.flap-style-btn').classList.add('active');
+                // Update current style
+                this.currentFlapStyle = e.target.closest('.flap-style-btn').dataset.style;
+                this.regenerateTemplate();
+            });
+        });
+
+        document.getElementById('overlap-amount').addEventListener('input', (e) => {
+            this.currentOverlapAmount = parseFloat(e.target.value);
+            document.getElementById('overlap-amount-value').textContent = e.target.value + '"';
+            this.regenerateTemplate();
         });
 
         // Download buttons
@@ -38,11 +67,21 @@ class EnvelopeGenerator {
             
             console.log('Selected envelope size:', { width, height, name: button.dataset.name });
             
+            // Store current dimensions for regeneration
+            this.currentWidth = width;
+            this.currentHeight = height;
+            
             // Generate template directly
             this.generateTemplateFromDimensions(width, height);
         } catch (error) {
             console.error('Error selecting standard size:', error);
             alert('Error generating template. Please try again.');
+        }
+    }
+
+    regenerateTemplate() {
+        if (this.currentWidth && this.currentHeight) {
+            this.generateTemplateFromDimensions(this.currentWidth, this.currentHeight);
         }
     }
 
@@ -55,10 +94,7 @@ class EnvelopeGenerator {
                 return;
             }
 
-            // Use default flap height for now
-            const flapHeight = 1.5;
-
-            this.currentTemplate = this.createEnvelopeTemplate(width, height, flapHeight);
+            this.currentTemplate = this.createEnvelopeTemplate(width, height, this.currentFlapHeight, this.currentFlapStyle, this.currentOverlapAmount);
             this.showPreview();
         } catch (error) {
             console.error('Error generating template:', error);
@@ -66,12 +102,12 @@ class EnvelopeGenerator {
         }
     }
 
-    createEnvelopeTemplate(width, height, flapHeight) {
+    createEnvelopeTemplate(width, height, flapHeight, flapStyle, overlapAmount) {
         // Validate all parameters
-        if (!width || !height || !flapHeight || 
-            isNaN(width) || isNaN(height) || isNaN(flapHeight) ||
-            width <= 0 || height <= 0 || flapHeight <= 0) {
-            console.error('Invalid template parameters:', { width, height, flapHeight });
+        if (!width || !height || !flapHeight || !flapStyle || !overlapAmount ||
+            isNaN(width) || isNaN(height) || isNaN(flapHeight) || isNaN(overlapAmount) ||
+            width <= 0 || height <= 0 || flapHeight <= 0 || overlapAmount <= 0) {
+            console.error('Invalid template parameters:', { width, height, flapHeight, flapStyle, overlapAmount });
             throw new Error('Invalid template parameters');
         }
 
@@ -80,18 +116,77 @@ class EnvelopeGenerator {
         const pixelWidth = width * dpi;
         const pixelHeight = height * dpi;
         const pixelFlapHeight = flapHeight * dpi;
+        const pixelOverlapAmount = overlapAmount * dpi;
 
         // Validate pixel dimensions
-        if (isNaN(pixelWidth) || isNaN(pixelHeight) || isNaN(pixelFlapHeight)) {
-            console.error('Invalid pixel dimensions:', { pixelWidth, pixelHeight, pixelFlapHeight });
+        if (isNaN(pixelWidth) || isNaN(pixelHeight) || isNaN(pixelFlapHeight) || isNaN(pixelOverlapAmount)) {
+            console.error('Invalid pixel dimensions:', { pixelWidth, pixelHeight, pixelFlapHeight, pixelOverlapAmount });
             throw new Error('Invalid pixel dimensions');
         }
 
-        // Calculate template dimensions (envelope size + flaps)
-        const sideFlapDepth = pixelFlapHeight / 2; // Half depth for side flaps
+        // Calculate template dimensions with proper overlap
+        // Side flaps should be half the envelope width plus overlap for proper sealing
+        // But limit the overlap to prevent excessive template sizes
+        const maxOverlap = pixelWidth * 0.5; // Limit overlap to 50% of envelope width
+        const limitedOverlap = Math.min(pixelOverlapAmount, maxOverlap);
+        const sideFlapDepth = (pixelWidth / 2) + limitedOverlap; // Half width + limited overlap
         const topFlapDepth = pixelFlapHeight; // Full depth for top flap
-        const totalWidth = pixelWidth + (2 * sideFlapDepth); // Left and right flaps (half depth)
-        const totalHeight = pixelHeight + topFlapDepth + sideFlapDepth; // Top flap (full) + bottom flap (half)
+        const bottomFlapDepth = pixelFlapHeight / 2; // Half depth for bottom flap
+        
+        // Calculate extra space needed for pointed/rounded flaps
+        let extraTopSpace = 0;
+        let extraBottomSpace = 0;
+        let extraLeftSpace = 0;
+        let extraRightSpace = 0;
+        
+        if (flapStyle === 'pointed') {
+            extraTopSpace = topFlapDepth * 0.3; // 30% extra for pointed tip
+            extraBottomSpace = bottomFlapDepth * 0.3; // 30% extra for pointed tip
+            extraLeftSpace = sideFlapDepth * 0.3; // 30% extra for pointed tip
+            extraRightSpace = sideFlapDepth * 0.3; // 30% extra for pointed tip
+        } else if (flapStyle === 'rounded') {
+            extraTopSpace = topFlapDepth * 0.2; // 20% extra for rounded curve
+            extraBottomSpace = bottomFlapDepth * 0.2; // 20% extra for rounded curve
+            extraLeftSpace = sideFlapDepth * 0.2; // 20% extra for rounded curve
+            extraRightSpace = sideFlapDepth * 0.2; // 20% extra for rounded curve
+        }
+        
+        // Total template size includes the envelope plus flaps plus extra space for pointed/rounded shapes
+        const totalWidth = sideFlapDepth + pixelWidth + sideFlapDepth + extraLeftSpace + extraRightSpace;
+        const totalHeight = pixelHeight + topFlapDepth + bottomFlapDepth + extraTopSpace + extraBottomSpace;
+        
+        // Debug logging
+        console.log('Template calculations:', {
+            envelopeWidth: pixelWidth,
+            envelopeHeight: pixelHeight,
+            sideFlapDepth: sideFlapDepth,
+            topFlapDepth: topFlapDepth,
+            bottomFlapDepth: bottomFlapDepth,
+            totalWidth: totalWidth,
+            totalHeight: totalHeight,
+            originalOverlap: pixelOverlapAmount,
+            limitedOverlap: limitedOverlap,
+            maxOverlap: maxOverlap,
+            flapStyle: flapStyle,
+            extraSpaces: { extraTopSpace, extraBottomSpace, extraLeftSpace, extraRightSpace }
+        });
+        
+        // Validate that template dimensions are reasonable
+        if (totalWidth > 2000 || totalHeight > 2000) {
+            console.warn('Template dimensions are very large:', { totalWidth, totalHeight });
+        }
+        
+        if (sideFlapDepth > pixelWidth) {
+            console.warn('Side flap depth is larger than envelope width:', { sideFlapDepth, pixelWidth });
+        }
+        
+        // Show warning if overlap was limited
+        const overlapWarning = document.getElementById('overlap-warning');
+        if (limitedOverlap < pixelOverlapAmount) {
+            overlapWarning.style.display = 'block';
+        } else {
+            overlapWarning.style.display = 'none';
+        }
 
         // Create SVG
         const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -117,14 +212,15 @@ class EnvelopeGenerator {
         const centerY = totalHeight / 2;
 
         // Create the cut lines (perimeter with flaps) - goes behind score lines
-        this.createCutLines(svg, pixelWidth, pixelHeight, pixelFlapHeight, centerX);
+        this.createCutLines(svg, pixelWidth, pixelHeight, pixelFlapHeight, pixelOverlapAmount, flapStyle, sideFlapDepth, topFlapDepth, bottomFlapDepth, extraLeftSpace, extraTopSpace);
 
         // Create score line rectangle (the envelope size) - goes on top
+        // Position the score rectangle accounting for extra space needed for pointed/rounded flaps
         const scoreRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-        scoreRect.setAttribute('x', sideFlapDepth + 0.5);
-        scoreRect.setAttribute('y', topFlapDepth + 0.5);
-        scoreRect.setAttribute('width', pixelWidth);
-        scoreRect.setAttribute('height', pixelHeight);
+        scoreRect.setAttribute('x', sideFlapDepth + extraLeftSpace + 0.5);
+        scoreRect.setAttribute('y', topFlapDepth + extraTopSpace + 0.5);
+        scoreRect.setAttribute('width', pixelWidth - 1);
+        scoreRect.setAttribute('height', pixelHeight - 1);
         scoreRect.setAttribute('stroke', '#000');
         scoreRect.setAttribute('stroke-linecap', 'round');
         scoreRect.setAttribute('stroke-dasharray', '2 4');
@@ -151,52 +247,33 @@ class EnvelopeGenerator {
             width: width,
             height: height,
             flapHeight: flapHeight,
+            flapStyle: flapStyle,
+            overlapAmount: overlapAmount,
             totalWidth: totalWidth / dpi,
             totalHeight: totalHeight / dpi
         };
     }
 
-    createCutLines(svg, pixelWidth, pixelHeight, pixelFlapHeight, centerX) {
-        // Create the cut lines (perimeter with flaps) as a single solid path
-        const cutPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        
-        // Calculate flap depths
-        const topFlapDepth = pixelFlapHeight; // Full depth for top flap
-        const sideFlapDepth = pixelFlapHeight / 2; // Half depth for side/bottom flaps
-        
+    createCutLines(svg, pixelWidth, pixelHeight, pixelFlapHeight, pixelOverlapAmount, flapStyle, sideFlapDepth, topFlapDepth, bottomFlapDepth, extraLeftSpace, extraTopSpace) {
         // Calculate the score rectangle corners (where we start and end)
-        const scoreLeft = sideFlapDepth;
-        const scoreTop = topFlapDepth;
+        // Account for extra space needed for pointed/rounded flaps
+        const scoreLeft = sideFlapDepth + extraLeftSpace;
+        const scoreTop = topFlapDepth + extraTopSpace;
         const scoreRight = scoreLeft + pixelWidth;
         const scoreBottom = scoreTop + pixelHeight;
         
-        // Build the cut path:
-        // Start at upper left corner of score line
-        let cutPathData = `M ${scoreLeft} ${scoreTop}`;
+        // Build the cut path based on flap style
+        let cutPathData = '';
         
-        // Top flap (rectangular, full depth)
-        cutPathData += ` L ${scoreLeft} ${scoreTop - topFlapDepth}`; // Up to top edge
-        cutPathData += ` L ${scoreRight} ${scoreTop - topFlapDepth}`; // Across to top right
-        cutPathData += ` L ${scoreRight} ${scoreTop}`; // Back to upper right corner of score line
+        if (flapStyle === 'square') {
+            cutPathData = this.createSquareFlaps(scoreLeft, scoreTop, scoreRight, scoreBottom, topFlapDepth, sideFlapDepth, bottomFlapDepth);
+        } else if (flapStyle === 'pointed') {
+            cutPathData = this.createPointedFlaps(scoreLeft, scoreTop, scoreRight, scoreBottom, topFlapDepth, sideFlapDepth, bottomFlapDepth);
+        } else if (flapStyle === 'rounded') {
+            cutPathData = this.createRoundedFlaps(scoreLeft, scoreTop, scoreRight, scoreBottom, topFlapDepth, sideFlapDepth, bottomFlapDepth);
+        }
         
-        // Right flap (rectangular, half depth)
-        cutPathData += ` L ${scoreRight + sideFlapDepth} ${scoreTop}`; // Out to right edge
-        cutPathData += ` L ${scoreRight + sideFlapDepth} ${scoreBottom}`; // Down to bottom
-        cutPathData += ` L ${scoreRight} ${scoreBottom}`; // Back to lower right corner of score line
-        
-        // Bottom flap (rectangular, half depth)
-        cutPathData += ` L ${scoreRight} ${scoreBottom + sideFlapDepth}`; // Down to bottom edge
-        cutPathData += ` L ${scoreLeft} ${scoreBottom + sideFlapDepth}`; // Across to left
-        cutPathData += ` L ${scoreLeft} ${scoreBottom}`; // Back to lower left corner of score line
-        
-        // Left flap (rectangular, half depth)
-        cutPathData += ` L ${scoreLeft - sideFlapDepth} ${scoreBottom}`; // Out to left edge
-        cutPathData += ` L ${scoreLeft - sideFlapDepth} ${scoreTop}`; // Up to top
-        cutPathData += ` L ${scoreLeft} ${scoreTop}`; // Back to upper left corner of score line
-        
-        // Close the path
-        cutPathData += ` Z`;
-        
+        const cutPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         cutPath.setAttribute('d', cutPathData);
         cutPath.setAttribute('stroke', '#000');
         cutPath.setAttribute('stroke-width', '1');
@@ -204,6 +281,108 @@ class EnvelopeGenerator {
         
         // Add the cut path to the SVG (this will be behind the score lines)
         svg.appendChild(cutPath);
+    }
+
+    createSquareFlaps(scoreLeft, scoreTop, scoreRight, scoreBottom, topFlapDepth, sideFlapDepth, bottomFlapDepth) {
+        // Start at upper left corner of score line
+        let pathData = `M ${scoreLeft} ${scoreTop}`;
+        
+        // Top flap (rectangular, full depth)
+        pathData += ` L ${scoreLeft} ${scoreTop - topFlapDepth}`; // Up to top edge
+        pathData += ` L ${scoreRight} ${scoreTop - topFlapDepth}`; // Across to top right
+        pathData += ` L ${scoreRight} ${scoreTop}`; // Back to upper right corner of score line
+        
+        // Right flap (rectangular, with overlap)
+        pathData += ` L ${scoreRight + sideFlapDepth} ${scoreTop}`; // Out to right edge
+        pathData += ` L ${scoreRight + sideFlapDepth} ${scoreBottom}`; // Down to bottom
+        pathData += ` L ${scoreRight} ${scoreBottom}`; // Back to lower right corner of score line
+        
+        // Bottom flap (rectangular, half depth)
+        pathData += ` L ${scoreRight} ${scoreBottom + bottomFlapDepth}`; // Down to bottom edge
+        pathData += ` L ${scoreLeft} ${scoreBottom + bottomFlapDepth}`; // Across to left
+        pathData += ` L ${scoreLeft} ${scoreBottom}`; // Back to lower left corner of score line
+        
+        // Left flap (rectangular, with overlap)
+        pathData += ` L ${scoreLeft - sideFlapDepth} ${scoreBottom}`; // Out to left edge
+        pathData += ` L ${scoreLeft - sideFlapDepth} ${scoreTop}`; // Up to top
+        pathData += ` L ${scoreLeft} ${scoreTop}`; // Back to upper left corner of score line
+        
+        // Close the path
+        pathData += ` Z`;
+        
+        return pathData;
+    }
+
+    createPointedFlaps(scoreLeft, scoreTop, scoreRight, scoreBottom, topFlapDepth, sideFlapDepth, bottomFlapDepth) {
+        // Start at upper left corner of score line
+        let pathData = `M ${scoreLeft} ${scoreTop}`;
+        
+        // Top flap (pointed)
+        const topCenterX = (scoreLeft + scoreRight) / 2;
+        const topCenterY = scoreTop - topFlapDepth;
+        pathData += ` L ${scoreLeft} ${scoreTop - topFlapDepth}`; // Up to top left
+        pathData += ` L ${topCenterX} ${topCenterY - (topFlapDepth * 0.3)}`; // To center point
+        pathData += ` L ${scoreRight} ${scoreTop - topFlapDepth}`; // To top right
+        pathData += ` L ${scoreRight} ${scoreTop}`; // Back to upper right corner of score line
+        
+        // Right flap (pointed)
+        const rightCenterY = (scoreTop + scoreBottom) / 2;
+        const rightCenterX = scoreRight + sideFlapDepth;
+        pathData += ` L ${scoreRight + sideFlapDepth} ${scoreTop}`; // Out to right top
+        pathData += ` L ${rightCenterX + (sideFlapDepth * 0.3)} ${rightCenterY}`; // To center point
+        pathData += ` L ${scoreRight + sideFlapDepth} ${scoreBottom}`; // To right bottom
+        pathData += ` L ${scoreRight} ${scoreBottom}`; // Back to lower right corner of score line
+        
+        // Bottom flap (pointed)
+        const bottomCenterX = (scoreLeft + scoreRight) / 2;
+        const bottomCenterY = scoreBottom + bottomFlapDepth;
+        pathData += ` L ${scoreRight} ${scoreBottom + bottomFlapDepth}`; // Down to bottom right
+        pathData += ` L ${bottomCenterX} ${bottomCenterY + (bottomFlapDepth * 0.3)}`; // To center point
+        pathData += ` L ${scoreLeft} ${scoreBottom + bottomFlapDepth}`; // To bottom left
+        pathData += ` L ${scoreLeft} ${scoreBottom}`; // Back to lower left corner of score line
+        
+        // Left flap (pointed)
+        const leftCenterY = (scoreTop + scoreBottom) / 2;
+        const leftCenterX = scoreLeft - sideFlapDepth;
+        pathData += ` L ${scoreLeft - sideFlapDepth} ${scoreBottom}`; // Out to left bottom
+        pathData += ` L ${leftCenterX - (sideFlapDepth * 0.3)} ${leftCenterY}`; // To center point
+        pathData += ` L ${scoreLeft - sideFlapDepth} ${scoreTop}`; // To left top
+        pathData += ` L ${scoreLeft} ${scoreTop}`; // Back to upper left corner of score line
+        
+        // Close the path
+        pathData += ` Z`;
+        
+        return pathData;
+    }
+
+    createRoundedFlaps(scoreLeft, scoreTop, scoreRight, scoreBottom, topFlapDepth, sideFlapDepth, bottomFlapDepth) {
+        // Start at upper left corner of score line
+        let pathData = `M ${scoreLeft} ${scoreTop}`;
+        
+        // Top flap (rounded)
+        pathData += ` L ${scoreLeft} ${scoreTop - topFlapDepth}`; // Up to top left
+        pathData += ` Q ${(scoreLeft + scoreRight) / 2} ${scoreTop - topFlapDepth - (topFlapDepth * 0.2)} ${scoreRight} ${scoreTop - topFlapDepth}`; // Rounded top
+        pathData += ` L ${scoreRight} ${scoreTop}`; // Back to upper right corner of score line
+        
+        // Right flap (rounded)
+        pathData += ` L ${scoreRight + sideFlapDepth} ${scoreTop}`; // Out to right top
+        pathData += ` Q ${scoreRight + sideFlapDepth + (sideFlapDepth * 0.2)} ${(scoreTop + scoreBottom) / 2} ${scoreRight + sideFlapDepth} ${scoreBottom}`; // Rounded right
+        pathData += ` L ${scoreRight} ${scoreBottom}`; // Back to lower right corner of score line
+        
+        // Bottom flap (rounded)
+        pathData += ` L ${scoreRight} ${scoreBottom + bottomFlapDepth}`; // Down to bottom right
+        pathData += ` Q ${(scoreLeft + scoreRight) / 2} ${scoreBottom + bottomFlapDepth + (bottomFlapDepth * 0.2)} ${scoreLeft} ${scoreBottom + bottomFlapDepth}`; // Rounded bottom
+        pathData += ` L ${scoreLeft} ${scoreBottom}`; // Back to lower left corner of score line
+        
+        // Left flap (rounded)
+        pathData += ` L ${scoreLeft - sideFlapDepth} ${scoreBottom}`; // Out to left bottom
+        pathData += ` Q ${scoreLeft - sideFlapDepth - (sideFlapDepth * 0.2)} ${(scoreTop + scoreBottom) / 2} ${scoreLeft - sideFlapDepth} ${scoreTop}`; // Rounded left
+        pathData += ` L ${scoreLeft} ${scoreTop}`; // Back to upper left corner of score line
+        
+        // Close the path
+        pathData += ` Z`;
+        
+        return pathData;
     }
 
 
@@ -222,6 +401,8 @@ class EnvelopeGenerator {
         templateInfo.innerHTML = `
             Envelope: ${this.currentTemplate.width}" × ${this.currentTemplate.height}" | 
             Flap Height: ${this.currentTemplate.flapHeight}" | 
+            Style: ${this.currentTemplate.flapStyle} | 
+            Overlap: ${this.currentTemplate.overlapAmount}" | 
             Total Template: ${this.currentTemplate.totalWidth.toFixed(2)}" × ${this.currentTemplate.totalHeight.toFixed(2)}"
         `;
 
@@ -242,7 +423,7 @@ class EnvelopeGenerator {
         
         const a = document.createElement('a');
         a.href = url;
-        a.download = `envelope-${this.currentTemplate.width}x${this.currentTemplate.height}.svg`;
+        a.download = `envelope-${this.currentTemplate.width}x${this.currentTemplate.height}-${this.currentTemplate.flapStyle}.svg`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -277,7 +458,7 @@ class EnvelopeGenerator {
             
             const imgData = canvas.toDataURL('image/png');
             pdf.addImage(imgData, 'PNG', 0, 0, this.currentTemplate.totalWidth, this.currentTemplate.totalHeight);
-            pdf.save(`envelope-${this.currentTemplate.width}x${this.currentTemplate.height}.pdf`);
+            pdf.save(`envelope-${this.currentTemplate.width}x${this.currentTemplate.height}-${this.currentTemplate.flapStyle}.pdf`);
         };
         
         img.src = 'data:image/svg+xml;base64,' + btoa(svgData);

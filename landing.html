@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SeedEnvelope Pro - Professional Seed Envelope Templates</title>
+    <link rel="stylesheet" href="design-system.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container">
+            <a href="/" class="nav-brand">🌱 SeedEnvelope Pro</a>
+            <div class="nav-buttons">
+                <button id="login-btn" class="btn btn-primary">Login</button>
+                <a href="/pricing" class="btn btn-secondary">Get Started</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="section section-hero">
+        <div class="container">
+            <h1>Professional Seed Envelope Templates</h1>
+            <p>Create perfect seed envelope templates for your Cricut, xTool, or other cutting machines. Generate custom templates with precise cut lines and score lines.</p>
+            <a href="pricing.html" class="btn btn-secondary">Start Your Subscription - $20/year</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section section-white">
+        <div class="container">
+            <h2 class="text-center mb-xl">Why Choose SeedEnvelope Pro?</h2>
+            <div class="grid grid-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="font-size: 2.5rem; margin-bottom: var(--space-lg); color: var(--etsy-orange);">✂️</div>
+                        <h3>Dual-Tool Support</h3>
+                        <p>Generate templates with separate cut lines (blade) and score lines (scoring head) for professional results.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="font-size: 2.5rem; margin-bottom: var(--space-lg); color: var(--etsy-orange);">📏</div>
+                        <h3>4 Standard Sizes</h3>
+                        <p>Pre-configured for #3, #4.5, #5, and #6 seed envelopes with customizable flap styles and overlap.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="font-size: 2.5rem; margin-bottom: var(--space-lg); color: var(--etsy-orange);">🎨</div>
+                        <h3>Multiple Flap Styles</h3>
+                        <p>Choose from square, pointed, or rounded flaps with adjustable heights and overlap amounts.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="font-size: 2.5rem; margin-bottom: var(--space-lg); color: var(--etsy-orange);">📄</div>
+                        <h3>Export Options</h3>
+                        <p>Download as SVG for cutting machines or PDF for printing. Optimized for xTool M1 Ultra and Cricut.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="font-size: 2.5rem; margin-bottom: var(--space-lg); color: var(--etsy-orange);">⚡</div>
+                        <h3>Instant Generation</h3>
+                        <p>Real-time preview with instant template generation. No waiting, no complicated software to learn.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="font-size: 2.5rem; margin-bottom: var(--space-lg); color: var(--etsy-orange);">🔒</div>
+                        <h3>Professional Quality</h3>
+                        <p>72 DPI print quality with vector-based paths for crisp, professional results every time.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="section section-light">
+        <div class="container">
+            <h2 class="text-center mb-xl">Simple, Affordable Pricing</h2>
+            <div class="card" style="max-width: 500px; margin: 0 auto;">
+                <div class="card-body text-center">
+                    <h3>SeedEnvelope Pro</h3>
+                    <div style="font-size: 3rem; font-weight: 700; color: var(--etsy-orange); margin: var(--space-lg) 0;">$20<span style="font-size: 1.1rem; color: var(--etsy-gray);">/year</span></div>
+                    <ul class="list-check">
+                        <li>Unlimited template generation</li>
+                        <li>All 4 standard seed envelope sizes</li>
+                        <li>3 flap styles (square, pointed, rounded)</li>
+                        <li>SVG and PDF export</li>
+                        <li>Real-time preview</li>
+                        <li>Professional print quality</li>
+                        <li>No watermarks or limitations</li>
+                        <li>Cancel anytime</li>
+                    </ul>
+                    <a href="pricing.html" class="btn btn-primary">Get Started Now</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 SeedEnvelope Pro. All rights reserved.</p>
+            <p>Professional seed envelope templates for serious gardeners.</p>
+        </div>
+    </footer>
+
+    <!-- Simple Login Button Handler -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔍 Landing page: DOMContentLoaded fired');
+            const loginBtn = document.getElementById('login-btn');
+            console.log('🔍 Login button found:', !!loginBtn);
+            
+            if (loginBtn) {
+                console.log('🔍 Adding click listener to login button');
+                loginBtn.addEventListener('click', function(e) {
+                    console.log('🔍 Login button clicked!');
+                    e.preventDefault();
+                    
+                    // Check auth status first
+                    fetch('/auth-status', { credentials: 'include' })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('🔍 Auth status:', data);
+                            if (data.authenticated) {
+                                console.log('✅ User is authenticated, redirecting to generator');
+                                window.location.href = '/generator';
+                            } else {
+                                console.log('❌ User not authenticated, redirecting to login page');
+                                window.location.href = '/login';
+                            }
+                        })
+                        .catch(error => {
+                            console.error('❌ Error checking auth:', error);
+                            window.location.href = '/login';
+                        });
+                });
+            } else {
+                console.log('❌ Login button not found');
+            }
+        });
+    </script>
+</body>
+</html>

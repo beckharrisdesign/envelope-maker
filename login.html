@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - SeedEnvelope Pro</title>
+    <link rel="stylesheet" href="design-system.css">
+    <style>
+        .login-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--etsy-orange) 0%, var(--etsy-orange-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-lg);
+        }
+        .login-card {
+            background: var(--etsy-white);
+            padding: var(--space-4xl);
+            border-radius: var(--radius-md);
+            box-shadow: var(--etsy-shadow-hover);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+        .login-card h1 {
+            font-size: var(--font-size-4xl);
+            margin-bottom: var(--space-sm);
+            color: var(--etsy-dark-gray);
+        }
+        .login-card p {
+            color: var(--etsy-gray);
+            margin-bottom: var(--space-2xl);
+            font-size: var(--font-size-lg);
+        }
+        .status-message {
+            padding: var(--space-md);
+            border-radius: var(--radius-sm);
+            margin: var(--space-lg) 0;
+            display: none;
+        }
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .status-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            margin: var(--space-lg) 0;
+        }
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--etsy-orange);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <div id="header-container"></div>
+
+    <div class="login-page">
+        <div class="login-card">
+            <h1>🌱 Welcome Back</h1>
+            <p>Enter your email to check your subscription status and access your account</p>
+            
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" id="email" name="email" required placeholder="your@email.com" class="form-input">
+                </div>
+                
+                <button type="submit" class="btn btn-primary" id="login-button" style="width: 100%;">
+                    Check My Account
+                </button>
+                
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Checking your account...</p>
+                </div>
+                
+                <div id="status-message" class="status-message"></div>
+            </form>
+            
+            <a href="/" class="back-link">← Back to Home</a>
+        </div>
+    </div>
+
+    <!-- Header Loader -->
+    <script src="header-loader.js"></script>
+    
+    <!-- Fallback Header Loader -->
+    <script>
+        // Fallback header loading in case the main loader fails
+        document.addEventListener('DOMContentLoaded', async function() {
+            const headerContainer = document.getElementById('header-container');
+            if (headerContainer && headerContainer.innerHTML.trim() === '') {
+                console.log('Header container is empty, loading header manually');
+                try {
+                    const response = await fetch('/header.html');
+                    const headerHTML = await response.text();
+                    headerContainer.innerHTML = headerHTML;
+                    console.log('Header loaded manually');
+                } catch (error) {
+                    console.error('Failed to load header manually:', error);
+                }
+            }
+        });
+    </script>
+
+    <script>
+        // Login form handling
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('login-form');
+            const loginButton = document.getElementById('login-button');
+            const loading = document.getElementById('loading');
+            const statusMessage = document.getElementById('status-message');
+            
+            // Check if user is already authenticated
+            checkAuthStatus();
+            
+            loginForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const email = document.getElementById('email').value;
+                
+                // Show loading state
+                loginButton.disabled = true;
+                loginButton.textContent = 'Checking...';
+                loading.style.display = 'block';
+                statusMessage.style.display = 'none';
+                
+                try {
+                    const response = await fetch('/check-subscription-by-email', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ email: email })
+                    });
+                    
+                    const data = await response.json();
+                    
+                if (data.subscribed) {
+                    // User has active subscription - session is already set by server
+                    showStatus('✅ Account found! You have an active subscription. Redirecting to generator...', 'success');
+                    
+                    // Wait a moment for session to be set, then redirect
+                    setTimeout(() => {
+                        window.location.href = '/generator';
+                    }, 2000);
+                } else {
+                        // No subscription found
+                        showStatus('❌ No active subscription found for this email. <a href="/pricing" style="color: #667eea; text-decoration: underline;">Subscribe now</a> to access the generator.', 'warning');
+                    }
+                } catch (error) {
+                    console.error('Login error:', error);
+                    showStatus('❌ Error checking your account. Please try again.', 'error');
+                } finally {
+                    // Reset button state
+                    loginButton.disabled = false;
+                    loginButton.textContent = 'Check My Account';
+                    loading.style.display = 'none';
+                }
+            });
+        });
+        
+        // Check if user is already authenticated
+        async function checkAuthStatus() {
+            try {
+                const response = await fetch('/auth-status', {
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    if (data.authenticated) {
+                        // User is already logged in, redirect to generator
+                        showStatus('✅ You are already logged in! Redirecting to generator...', 'success');
+                        setTimeout(() => {
+                            window.location.href = '/generator';
+                        }, 1500);
+                    }
+                }
+            } catch (error) {
+                console.error('Error checking auth status:', error);
+            }
+        }
+        
+        // Show status message
+        function showStatus(message, type) {
+            const statusMessage = document.getElementById('status-message');
+            statusMessage.innerHTML = message;
+            statusMessage.className = `status-message status-${type}`;
+            statusMessage.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
