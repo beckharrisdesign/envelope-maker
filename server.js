@@ -1,16 +1,16 @@
 require('dotenv').config();
 const express = require('express');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder');
 const cors = require('cors');
 const path = require('path');
 const session = require('express-session');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 // Session configuration
 app.use(session({
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET || 'replit-dev-secret-change-in-production',
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -360,7 +360,7 @@ app.get('/test-auth', (req, res) => {
     res.redirect('/generator');
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on port ${PORT}`);
     console.log(`Landing page: http://localhost:${PORT}`);
     console.log(`Pricing page: http://localhost:${PORT}/pricing`);
