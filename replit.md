@@ -35,8 +35,14 @@ Professional seed envelope template generator with Stripe subscription integrati
 1. **Port Configuration**: Changed default port from 3000 to 5000 (required for Replit)
 2. **Host Binding**: Server now binds to `0.0.0.0:5000` for Replit proxy compatibility
 3. **Dependencies**: Installed all npm packages (express, stripe, dotenv, cors, express-session)
-4. **Default Values**: Added fallback values for SESSION_SECRET and STRIPE_SECRET_KEY
-5. **Workflow**: Configured `Server` workflow to run `npm start` on port 5000
+4. **Workflow**: Configured `Server` workflow to run `npm start` on port 5000
+
+### Deployment Resilience Updates
+1. **Stripe Error Handling**: Added try-catch blocks around Stripe initialization to prevent crashes
+2. **Graceful Degradation**: Server now starts successfully even if Stripe keys are missing or invalid
+3. **Health Check Endpoint**: Added `/health` endpoint for deployment monitoring
+4. **Conditional Stripe Calls**: All Stripe-dependent endpoints check if Stripe is initialized before making API calls
+5. **Proper Error Messages**: Returns user-friendly error messages when Stripe is not configured
 
 ## Environment Variables Required
 
@@ -83,16 +89,17 @@ The following secrets need to be configured via Replit Secrets:
 - `GET /` - Landing page
 - `GET /pricing` - Pricing and subscription page
 - `GET /login` - Login for existing subscribers
+- `GET /health` - Health check endpoint for deployment monitoring
 
 ### Protected Routes
 - `GET /generator` - Main envelope generator tool (requires subscription)
 
 ### API Endpoints
-- `POST /create-checkout-session` - Create Stripe checkout session
-- `POST /webhook` - Stripe webhook handler
-- `GET /stripe-config` - Get Stripe public configuration
-- `POST /check-subscription-by-email` - Verify subscription by email
-- `GET /auth-status` - Check current authentication status
+- `POST /create-checkout-session` - Create Stripe checkout session (with error handling)
+- `POST /webhook` - Stripe webhook handler (with validation)
+- `GET /stripe-config` - Get Stripe public configuration (returns null if not configured)
+- `POST /check-subscription-by-email` - Verify subscription by email (requires Stripe)
+- `GET /auth-status` - Check current authentication status (gracefully handles missing Stripe)
 - `POST /logout` - Destroy session and log out
 - `GET /test-auth` - Test endpoint to manually authenticate (debugging)
 

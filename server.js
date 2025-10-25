@@ -1,12 +1,28 @@
 require('dotenv').config();
 const express = require('express');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder');
 const cors = require('cors');
 const path = require('path');
 const session = require('express-session');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+let stripe = null;
+let stripeInitialized = false;
+
+try {
+    const stripeKey = process.env.STRIPE_SECRET_KEY;
+    if (stripeKey && stripeKey.startsWith('sk_')) {
+        stripe = require('stripe')(stripeKey);
+        stripeInitialized = true;
+        console.log('✅ Stripe initialized successfully');
+    } else {
+        console.warn('⚠️  Stripe not initialized: Missing or invalid STRIPE_SECRET_KEY');
+    }
+} catch (error) {
+    console.error('❌ Stripe initialization failed:', error.message);
+    console.log('ℹ️  Server will start without Stripe functionality');
+}
 
 // Session configuration
 app.use(session({
@@ -46,6 +62,17 @@ app.use(express.static('.', {
     index: false // Don't serve index.html automatically
 }));
 
+// Health check endpoint for deployment monitoring
+app.get('/health', (req, res) => {
+    res.status(200).json({
+        status: 'healthy',
+        timestamp: new Date().toISOString(),
+        stripeConfigured: stripeInitialized,
+        environment: process.env.NODE_ENV || 'development',
+        port: PORT
+    });
+});
+
 // Route handlers
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'landing.html'));
@@ -79,7 +106,7 @@ app.get('/generator.html', async (req, res) => {
         try {
             // Get the session ID from the URL or session
             const sessionId = req.query.session_id;
-            if (sessionId) {
+            if (sessionId && stripeInitialized) {
                 // Retrieve the checkout session to get customer ID
                 const checkoutSession = await stripe.checkout.sessions.retrieve(sessionId);
                 
@@ -111,6 +138,12 @@ app.get('/generator.html', async (req, res) => {
 
 // Stripe Integration
 app.post('/create-checkout-session', async (req, res) => {
+    if (!stripeInitialized) {
+        return res.status(503).json({ 
+            error: 'Stripe is not configured. Please contact support.' 
+        });
+    }
+    
     try {
         const { priceId, successUrl, cancelUrl } = req.body;
         
@@ -140,6 +173,11 @@ app.post('/create-checkout-session', async (req, res) => {
 
 // Webhook for Stripe events
 app.post('/webhook', express.raw({type: 'application/json'}), (req, res) => {
+    if (!stripeInitialized) {
+        console.warn('⚠️  Webhook called but Stripe is not initialized');
+        return res.status(503).json({ error: 'Stripe not configured' });
+    }
+    
     const sig = req.headers['stripe-signature'];
     let event;
 
@@ -190,9 +228,17 @@ app.post('/webhook', express.raw({type: 'application/json'}), (req, res) => {
 
 // Serve Stripe configuration to frontend
 app.get('/stripe-config', (req, res) => {
+    if (!stripeInitialized) {
+        return res.json({
+            publishableKey: null,
+            priceId: null,
+            error: 'Stripe not configured'
+        });
+    }
+    
     res.json({
-        publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
-        priceId: process.env.STRIPE_PRICE_ID
+        publishableKey: process.env.STRIPE_PUBLISHABLE_KEY || null,
+        priceId: process.env.STRIPE_PRICE_ID || null
     });
 });
 
@@ -250,7 +296,7 @@ app.get('/auth-status', async (req, res) => {
     console.log('---');
     
     // If we have a customer ID, check Stripe subscription status
-    if (sessionInfo.customerId) {
+    if (sessionInfo.customerId && stripeInitialized) {
         try {
             const subscriptions = await stripe.subscriptions.list({
                 customer: sessionInfo.customerId,
@@ -296,6 +342,13 @@ app.get('/auth-status', async (req, res) => {
 
 // Check subscription by email
 app.post('/check-subscription-by-email', async (req, res) => {
+    if (!stripeInitialized) {
+        return res.status(503).json({ 
+            error: 'Stripe is not configured. Please contact support.',
+            subscribed: false 
+        });
+    }
+    
     try {
         const { email } = req.body;
         
