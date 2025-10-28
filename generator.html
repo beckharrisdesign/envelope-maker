@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator - SeedEnvelope Pro</title>
+    <title>Generator - PaperCraft</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="design-system.css">
     <style>
         .subscription-required {
@@ -70,38 +73,24 @@
     <div id="subscription-required" class="subscription-required">
         <div class="subscription-card">
             <h1>🌱 Subscription Required</h1>
-            <p>You need an active subscription to access the SeedEnvelope Pro generator.</p>
+            <p>You need an active subscription to access the PaperCraft generator.</p>
             <a href="pricing.html" class="btn btn-primary">Subscribe Now - $20/year</a>
         </div>
     </div>
 
-    <!-- Navigation -->
-    <nav class="nav">
-        <div class="container">
-            <a href="/" class="nav-brand">🌱 SeedEnvelope Pro</a>
-            <div class="nav-buttons" id="nav-buttons">
-                <!-- Logged out state -->
-                <div id="logged-out-nav" style="display: none;">
-                    <button id="login-btn" class="btn btn-primary">Login</button>
-                    <a href="/pricing" class="btn btn-secondary">Get Started</a>
-                </div>
-                <!-- Logged in state -->
-                <div id="logged-in-nav" style="display: block;">
-                    <span id="user-info" style="margin-right: 20px; color: var(--etsy-dark-gray); font-weight: 500;">Pro User</span>
-                    <a href="/generator" class="btn btn-primary">Generator</a>
-                    <button id="logout-btn" class="btn btn-danger">Logout</button>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <!-- Software Company Header -->
+    <div id="header-container"></div>
+    
+    <!-- Header Loader -->
+    <script src="header-loader.js"></script>
 
     <!-- Generator Content (Hidden until subscription verified) -->
     <div id="generator-content" class="generator-content">
 
         <!-- Your existing generator content -->
         <header class="text-center mb-xl">
-            <h1>🌱 Seed Envelope Template Generator</h1>
-            <p>Create seed envelope templates for your Cricut or xTool vinyl cutter</p>
+            <h1>🌱 PaperCraft Template Generator</h1>
+            <p>Create custom paper packaging templates for your Cricut or xTool vinyl cutter</p>
             <small style="opacity: 0.7;">v1.0.0 - Pro Subscription Active</small>
         </header>
 
@@ -114,17 +103,17 @@
                     </div>
                     <div class="card-body">
                         <div class="standard-sizes">
-                            <button class="size-btn" data-width="2.5" data-height="4.25" data-name="#3 Seed Envelope">
-                                #3 Seed Envelope<br><small>2½" × 4¼"</small>
+                            <button class="size-btn" data-width="2.5" data-height="4.25" data-name="#3 Envelope">
+                                #3 Envelope<br><small>2½" × 4¼"</small>
                             </button>
-                            <button class="size-btn" data-width="3" data-height="4.875" data-name="#4.5 Seed Envelope">
-                                #4.5 Seed Envelope<br><small>3" × 4⅞"</small>
+                            <button class="size-btn" data-width="3" data-height="4.875" data-name="#4.5 Envelope">
+                                #4.5 Envelope<br><small>3" × 4⅞"</small>
                             </button>
-                            <button class="size-btn" data-width="2.875" data-height="5.25" data-name="#5 Seed Envelope">
-                                #5 Seed Envelope<br><small>2⅞" × 5¼"</small>
+                            <button class="size-btn" data-width="2.875" data-height="5.25" data-name="#5 Envelope">
+                                #5 Envelope<br><small>2⅞" × 5¼"</small>
                             </button>
-                            <button class="size-btn" data-width="3.375" data-height="6" data-name="#6 Seed Envelope">
-                                #6 Seed Envelope<br><small>3⅜" × 6"</small>
+                            <button class="size-btn" data-width="3.375" data-height="6" data-name="#6 Envelope">
+                                #6 Envelope<br><small>3⅜" × 6"</small>
                             </button>
                         </div>
                     </div>
@@ -263,7 +252,57 @@
         // Check subscription status on page load
         document.addEventListener('DOMContentLoaded', async () => {
             await checkSubscriptionStatus();
+            await checkAuthStatus();
         });
+
+        // Header functionality
+        async function checkAuthStatus() {
+            try {
+                const response = await fetch('/auth-status', {
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    if (data.authenticated) {
+                        // Update login link to show user status
+                        const loginLink = document.querySelector('.login-link');
+                        if (loginLink) {
+                            if (data.subscriptionDate) {
+                                const date = new Date(data.subscriptionDate);
+                                loginLink.textContent = `Pro User (since ${date.toLocaleDateString()})`;
+                            } else {
+                                loginLink.textContent = 'Pro User';
+                            }
+                            loginLink.href = '/generator';
+                        }
+                        
+                        // Update CTA button
+                        const ctaButton = document.querySelector('.cta-button');
+                        if (ctaButton) {
+                            ctaButton.textContent = 'Go to Generator';
+                            ctaButton.href = '/generator';
+                        }
+                    } else {
+                        // Reset to default state
+                        const loginLink = document.querySelector('.login-link');
+                        if (loginLink) {
+                            loginLink.textContent = 'Log in';
+                            loginLink.href = '/login';
+                        }
+                        
+                        const ctaButton = document.querySelector('.cta-button');
+                        if (ctaButton) {
+                            ctaButton.textContent = 'Get Started';
+                            ctaButton.href = '/pricing';
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error checking auth status:', error);
+            }
+        }
 
         async function checkSubscriptionStatus() {
             try {
@@ -297,5 +336,52 @@
             }
         }
     </script>
+    
+    <!-- Software Company Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-divider"></div>
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <div class="footer-logomark">🌱</div>
+                        <span class="footer-brand-text">PaperCraft</span>
+                    </div>
+                    <div class="footer-social">
+                        <div class="social-icon" title="Facebook">📘</div>
+                        <div class="social-icon" title="Instagram">📷</div>
+                        <div class="social-icon" title="Twitter">🐦</div>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <a href="/about">About Us</a>
+                    <a href="/careers">Careers</a>
+                    <a href="/press">Press</a>
+                    <a href="/blog">Blog</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Support</h4>
+                    <a href="/help">Help Center</a>
+                    <a href="/contact">Contact Us</a>
+                    <a href="/status">Status</a>
+                    <a href="/privacy">Privacy Policy</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Resources</h4>
+                    <a href="/templates">Templates</a>
+                    <a href="/case-studies">Case Studies</a>
+                    <a href="/api-docs">API Documentation</a>
+                    <a href="/community">Community</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Legal</h4>
+                    <a href="/terms">Terms of Service</a>
+                    <a href="/license">License Agreement</a>
+                    <a href="/cookies">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

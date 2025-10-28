@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - PaperCraft</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="design-system.css">
+</head>
+<body>
+    <!-- Software Company Header -->
+    <div id="header-container"></div>
+    
+    <!-- Header Loader -->
+    <script src="header-loader.js"></script>
+
+    <!-- Contact Section -->
+    <section class="section section-white">
+        <div class="container">
+            <h1 class="text-center mb-xl">Contact Us</h1>
+            <p class="text-center mb-xl">We'd love to hear from you. Get in touch with our team.</p>
+            
+            <div class="grid grid-2">
+                <div class="card">
+                    <div class="card-body">
+                        <h3>Get in Touch</h3>
+                        <p>Have questions about PaperCraft Pro? Need help with your templates? Want to suggest a new feature? We're here to help!</p>
+                        
+                        <div class="mt-lg">
+                            <h4>📧 Email Support</h4>
+                            <p>For general inquiries and support: <a href="mailto:support@papercraftpro.com">support@papercraftpro.com</a></p>
+                            
+                            <h4>💼 Business Inquiries</h4>
+                            <p>For partnerships and business opportunities: <a href="mailto:business@papercraftpro.com">business@papercraftpro.com</a></p>
+                            
+                            <h4>🐛 Bug Reports</h4>
+                            <p>Found a bug? Let us know: <a href="mailto:bugs@papercraftpro.com">bugs@papercraftpro.com</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h3>Contact Form</h3>
+                        <form id="contact-form">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" id="name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="subject">Subject</label>
+                                <select id="subject" name="subject" required>
+                                    <option value="">Select a topic</option>
+                                    <option value="general">General Inquiry</option>
+                                    <option value="support">Technical Support</option>
+                                    <option value="feature">Feature Request</option>
+                                    <option value="bug">Bug Report</option>
+                                    <option value="business">Business Inquiry</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <textarea id="message" name="message" rows="5" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-xl">
+                <h3>Response Times</h3>
+                <div class="grid grid-3 mt-lg">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <div style="font-size: 2.5rem; margin-bottom: var(--space-lg); color: var(--papercraft-green-primary);">⚡</div>
+                            <h4>General Support</h4>
+                            <p>24-48 hours</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <div style="font-size: 2.5rem; margin-bottom: var(--space-lg); color: var(--papercraft-green-primary);">🔧</div>
+                            <h4>Technical Issues</h4>
+                            <p>12-24 hours</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <div style="font-size: 2.5rem; margin-bottom: var(--space-lg); color: var(--papercraft-green-primary);">💼</div>
+                            <h4>Business Inquiries</h4>
+                            <p>2-3 business days</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-xl">
+                <a href="pricing.html" class="btn btn-primary">Get Started</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Software Company Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-divider"></div>
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <div class="footer-logomark">🌱</div>
+                        <span class="footer-brand-text">PaperCraft</span>
+                    </div>
+                    <div class="footer-social">
+                        <div class="social-icon" title="Facebook">📘</div>
+                        <div class="social-icon" title="Instagram">📷</div>
+                        <div class="social-icon" title="Twitter">🐦</div>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <a href="/about">About Us</a>
+                    <a href="/careers">Careers</a>
+                    <a href="/press">Press</a>
+                    <a href="/blog">Blog</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Support</h4>
+                    <a href="/help">Help Center</a>
+                    <a href="/contact">Contact Us</a>
+                    <a href="/status">Status</a>
+                    <a href="/privacy">Privacy Policy</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Resources</h4>
+                    <a href="/templates">Templates</a>
+                    <a href="/case-studies">Case Studies</a>
+                    <a href="/api-docs">API Documentation</a>
+                    <a href="/community">Community</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Legal</h4>
+                    <a href="/terms">Terms of Service</a>
+                    <a href="/license">License Agreement</a>
+                    <a href="/cookies">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Header functionality -->
+    <script>
+        async function checkAuthStatus() {
+            try {
+                const response = await fetch('/auth-status', {
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    if (data.authenticated) {
+                        // Update login link to show user status
+                        const loginLink = document.querySelector('.login-link');
+                        if (loginLink) {
+                            if (data.subscriptionDate) {
+                                const date = new Date(data.subscriptionDate);
+                                loginLink.textContent = `Pro User (since ${date.toLocaleDateString()})`;
+                            } else {
+                                loginLink.textContent = 'Pro User';
+                            }
+                            loginLink.href = '/generator';
+                        }
+                        
+                        // Update CTA button
+                        const ctaButton = document.querySelector('.cta-button');
+                        if (ctaButton) {
+                            ctaButton.textContent = 'Go to Generator';
+                            ctaButton.href = '/generator';
+                        }
+                    } else {
+                        // Reset to default state
+                        const loginLink = document.querySelector('.login-link');
+                        if (loginLink) {
+                            loginLink.textContent = 'Log in';
+                            loginLink.href = '/login';
+                        }
+                        
+                        const ctaButton = document.querySelector('.cta-button');
+                        if (ctaButton) {
+                            ctaButton.textContent = 'Get Started';
+                            ctaButton.href = '/pricing';
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error checking auth status:', error);
+            }
+        }
+
+        // Contact form handling
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your message! We\'ll get back to you soon.');
+            this.reset();
+        });
+
+        // Initialize header
+        checkAuthStatus();
+    </script>
+</body>
+</html>

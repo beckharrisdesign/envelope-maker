@@ -1,6 +1,6 @@
 # Replit Deployment Guide
 
-## 🚀 **Deploy SeedEnvelope Pro to Replit**
+## 🚀 **Deploy PaperCraft to Replit**
 
 Replit is the perfect hosting platform for your Node.js SaaS application. It provides automatic deployments, environment variable management, and custom domains.
 

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Templates - PaperCraft</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="design-system.css">
+</head>
+<body>
+    <!-- Software Company Header -->
+    <header class="software-header">
+        <div class="container">
+            <div class="header-left">
+                <div class="header-logo">
+                    <div class="header-logomark">🌱</div>
+                    <span class="header-brand-text">PaperCraft</span>
+                </div>
+                <nav class="header-nav">
+                    <a href="/features" class="nav-link">
+                        Features
+                        <span class="nav-chevron">▼</span>
+                    </a>
+                    <a href="/pricing" class="nav-link">
+                        Pricing
+                        <span class="nav-chevron">▼</span>
+                    </a>
+                    <a href="/about" class="nav-link">
+                        About
+                        <span class="nav-chevron">▼</span>
+                    </a>
+                    <a href="/contact" class="nav-link">
+                        Contact
+                        <span class="nav-chevron">▼</span>
+                    </a>
+                </nav>
+            </div>
+            <div class="header-buttons">
+                <a href="/login" class="btn btn-secondary">Log in</a>
+                <a href="/pricing" class="btn btn-primary">Get Started</a>
+            </div>
+        </div>
+        <div class="header-divider"></div>
+    </header>
+
+    <!-- Templates Section -->
+    <section class="section section-white">
+        <div class="container">
+            <h1 class="text-center mb-xl">Template Gallery</h1>
+            <p class="text-center mb-xl">Browse our collection of professional packaging templates</p>
+            
+            <div class="grid grid-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="font-size: 2.5rem; margin-bottom: var(--space-lg); color: var(--papercraft-green-primary);">📦</div>
+                        <h3>Envelopes</h3>
+                        <p>Perfect for packaging seeds, small items, or samples</p>
+                        <a href="/generator" class="btn btn-outline">Create Template</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="font-size: 2.5rem; margin-bottom: var(--space-lg); color: var(--papercraft-green-primary);">🎁</div>
+                        <h3>Gift Boxes</h3>
+                        <p>Custom gift boxes for any occasion</p>
+                        <a href="/generator" class="btn btn-outline">Create Template</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="font-size: 2.5rem; margin-bottom: var(--space-lg); color: var(--papercraft-green-primary);">📄</div>
+                        <h3>Document Holders</h3>
+                        <p>Professional document and folder templates</p>
+                        <a href="/generator" class="btn btn-outline">Create Template</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-xl">
+                <h3>Need a Custom Template?</h3>
+                <p>Can't find what you're looking for? Create a custom template with your exact specifications.</p>
+                <a href="pricing.html" class="btn btn-primary">Get Started</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Software Company Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-divider"></div>
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <div class="footer-logomark">🌱</div>
+                        <span class="footer-brand-text">PaperCraft</span>
+                    </div>
+                    <div class="footer-social">
+                        <div class="social-icon" title="Facebook">📘</div>
+                        <div class="social-icon" title="Instagram">📷</div>
+                        <div class="social-icon" title="Twitter">🐦</div>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <a href="/about">About Us</a>
+                    <a href="/careers">Careers</a>
+                    <a href="/press">Press</a>
+                    <a href="/blog">Blog</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Support</h4>
+                    <a href="/help">Help Center</a>
+                    <a href="/contact">Contact Us</a>
+                    <a href="/status">Status</a>
+                    <a href="/privacy">Privacy Policy</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Resources</h4>
+                    <a href="/templates">Templates</a>
+                    <a href="/case-studies">Case Studies</a>
+                    <a href="/api-docs">API Documentation</a>
+                    <a href="/community">Community</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Legal</h4>
+                    <a href="/terms">Terms of Service</a>
+                    <a href="/license">License Agreement</a>
+                    <a href="/cookies">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Header functionality -->
+    <script>
+        async function checkAuthStatus() {
+            try {
+                const response = await fetch('/auth-status', {
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    if (data.authenticated) {
+                        // Update login link to show user status
+                        const loginLink = document.querySelector('.login-link');
+                        if (loginLink) {
+                            if (data.subscriptionDate) {
+                                const date = new Date(data.subscriptionDate);
+                                loginLink.textContent = `Pro User (since ${date.toLocaleDateString()})`;
+                            } else {
+                                loginLink.textContent = 'Pro User';
+                            }
+                            loginLink.href = '/generator';
+                        }
+                        
+                        // Update CTA button
+                        const ctaButton = document.querySelector('.cta-button');
+                        if (ctaButton) {
+                            ctaButton.textContent = 'Go to Generator';
+                            ctaButton.href = '/generator';
+                        }
+                    } else {
+                        // Reset to default state
+                        const loginLink = document.querySelector('.login-link');
+                        if (loginLink) {
+                            loginLink.textContent = 'Log in';
+                            loginLink.href = '/login';
+                        }
+                        
+                        const ctaButton = document.querySelector('.cta-button');
+                        if (ctaButton) {
+                            ctaButton.textContent = 'Get Started';
+                            ctaButton.href = '/pricing';
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error checking auth status:', error);
+            }
+        }
+
+        // Initialize header
+        checkAuthStatus();
+    </script>
+</body>
+</html>

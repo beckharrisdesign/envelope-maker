@@ -3,36 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seed Envelope Template Generator</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>PaperCraft Template Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="design-system.css">
 </head>
 <body>
-    <!-- Navigation -->
-    <nav style="background: white; padding: 20px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
-            <div style="font-size: 1.5rem; font-weight: bold; color: #667eea;">
-                <a href="/" style="text-decoration: none; color: inherit;">🌱 SeedEnvelope Pro</a>
-            </div>
-            <div id="nav-buttons">
-                <!-- Logged out state -->
-                <div id="logged-out-nav" style="display: block;">
-                    <button id="login-btn" style="background: #667eea; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 1rem; margin-right: 10px;">Login</button>
-                    <a href="/pricing" class="cta-button" style="padding: 12px 24px; font-size: 1rem; background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); color: white; text-decoration: none; border-radius: 8px;">Get Started</a>
-                </div>
-                <!-- Logged in state -->
-                <div id="logged-in-nav" style="display: none;">
-                    <span id="user-info" style="margin-right: 20px; color: #667eea; font-weight: 500;"></span>
-                    <a href="/generator" class="cta-button" style="padding: 12px 24px; font-size: 1rem; margin-right: 10px; background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); color: white; text-decoration: none; border-radius: 8px;">Generator</a>
-                    <button id="logout-btn" style="background: #e53e3e; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 1rem;">Logout</button>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <!-- Software Company Header -->
+    <div id="header-container"></div>
+    
+    <!-- Header Loader -->
+    <script src="header-loader.js"></script>
     
     <div class="container">
         <header>
-            <h1>🌱 Seed Envelope Template Generator</h1>
-            <p>Create seed envelope templates for your Cricut or xTool vinyl cutter</p>
+            <h1>🌱 PaperCraft Template Generator</h1>
+            <p>Create custom paper packaging templates for your Cricut or xTool vinyl cutter</p>
             <small style="opacity: 0.7;">v1.0.0 - Professional SaaS Application</small>
         </header>
 
@@ -41,17 +28,17 @@
                 <div class="size-column">
                     <div class="size-options">
                         <div class="standard-sizes">
-                            <button class="size-btn" data-width="2.5" data-height="4.25" data-name="#3 Seed Envelope">
-                                #3 Seed Envelope<br><small>2½" × 4¼"</small>
+                            <button class="size-btn" data-width="2.5" data-height="4.25" data-name="#3 Envelope">
+                                #3 Envelope<br><small>2½" × 4¼"</small>
                             </button>
-                            <button class="size-btn" data-width="3" data-height="4.875" data-name="#4.5 Seed Envelope">
-                                #4.5 Seed Envelope<br><small>3" × 4⅞"</small>
+                            <button class="size-btn" data-width="3" data-height="4.875" data-name="#4.5 Envelope">
+                                #4.5 Envelope<br><small>3" × 4⅞"</small>
                             </button>
-                            <button class="size-btn" data-width="2.875" data-height="5.25" data-name="#5 Seed Envelope">
-                                #5 Seed Envelope<br><small>2⅞" × 5¼"</small>
+                            <button class="size-btn" data-width="2.875" data-height="5.25" data-name="#5 Envelope">
+                                #5 Envelope<br><small>2⅞" × 5¼"</small>
                             </button>
-                            <button class="size-btn" data-width="3.375" data-height="6" data-name="#6 Seed Envelope">
-                                #6 Seed Envelope<br><small>3⅜" × 6"</small>
+                            <button class="size-btn" data-width="3.375" data-height="6" data-name="#6 Envelope">
+                                #6 Envelope<br><small>3⅜" × 6"</small>
                             </button>
                         </div>
                     </div>
@@ -116,84 +103,107 @@
         </main>
     </div>
 
-    <!-- Session-Aware Header JavaScript -->
+    <!-- Header JavaScript -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('🔍 Index page: DOMContentLoaded fired');
-            
-            // Check auth status and update header
-            checkAuthStatus();
-            
-            // Add login button handler
-            const loginBtn = document.getElementById('login-btn');
-            if (loginBtn) {
-                loginBtn.addEventListener('click', function(e) {
-                    console.log('🔍 Login button clicked!');
-                    e.preventDefault();
-                    
-                    fetch('/auth-status', { credentials: 'include' })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.authenticated) {
-                                window.location.href = '/generator';
-                            } else {
-                                window.location.href = '/login';
-                            }
-                        });
-                });
-            }
-            
-            // Add logout button handler
-            const logoutBtn = document.getElementById('logout-btn');
-            if (logoutBtn) {
-                logoutBtn.addEventListener('click', function(e) {
-                    console.log('🔍 Logout button clicked!');
-                    e.preventDefault();
-                    
-                    fetch('/logout', { method: 'POST', credentials: 'include' })
-                        .then(() => {
-                            window.location.href = '/';
-                        });
-                });
-            }
-        });
-        
-        // Check authentication status and update header
+        // Header functionality
         async function checkAuthStatus() {
             try {
-                const response = await fetch('/auth-status', { credentials: 'include' });
+                const response = await fetch('/auth-status', {
+                    credentials: 'include'
+                });
+                
                 if (response.ok) {
                     const data = await response.json();
-                    console.log('🔍 Auth status:', data);
                     
                     if (data.authenticated) {
-                        // User is logged in
-                        document.getElementById('logged-out-nav').style.display = 'none';
-                        document.getElementById('logged-in-nav').style.display = 'block';
+                        // Update login link to show user status
+                        const loginLink = document.querySelector('.login-link');
+                        if (loginLink) {
+                            if (data.subscriptionDate) {
+                                const date = new Date(data.subscriptionDate);
+                                loginLink.textContent = `Pro User (since ${date.toLocaleDateString()})`;
+                            } else {
+                                loginLink.textContent = 'Pro User';
+                            }
+                            loginLink.href = '/generator';
+                        }
                         
-                        const userInfo = document.getElementById('user-info');
-                        if (data.subscriptionDate) {
-                            const date = new Date(data.subscriptionDate);
-                            userInfo.textContent = `Pro User (since ${date.toLocaleDateString()})`;
-                        } else {
-                            userInfo.textContent = 'Pro User';
+                        // Update CTA button
+                        const ctaButton = document.querySelector('.cta-button');
+                        if (ctaButton) {
+                            ctaButton.textContent = 'Go to Generator';
+                            ctaButton.href = '/generator';
                         }
                     } else {
-                        // User is not logged in
-                        document.getElementById('logged-out-nav').style.display = 'block';
-                        document.getElementById('logged-in-nav').style.display = 'none';
+                        // Reset to default state
+                        const loginLink = document.querySelector('.login-link');
+                        if (loginLink) {
+                            loginLink.textContent = 'Log in';
+                            loginLink.href = '/login';
+                        }
+                        
+                        const ctaButton = document.querySelector('.cta-button');
+                        if (ctaButton) {
+                            ctaButton.textContent = 'Get Started';
+                            ctaButton.href = '/pricing';
+                        }
                     }
                 }
             } catch (error) {
                 console.error('Error checking auth status:', error);
-                // Default to logged out state
-                document.getElementById('logged-out-nav').style.display = 'block';
-                document.getElementById('logged-in-nav').style.display = 'none';
             }
         }
+
+        // Initialize header when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔍 Index page: DOMContentLoaded fired');
+            checkAuthStatus();
+        });
     </script>
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="script.js"></script>
-</body>
-</html>
+    <!-- Software Company Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-divider"></div>
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <div class="footer-logomark">🌱</div>
+                        <span class="footer-brand-text">PaperCraft</span>
+                    </div>
+                    <div class="footer-social">
+                        <div class="social-icon" title="Facebook">📘</div>
+                        <div class="social-icon" title="Instagram">📷</div>
+                        <div class="social-icon" title="Twitter">🐦</div>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <a href="/about">About Us</a>
+                    <a href="/careers">Careers</a>
+                    <a href="/press">Press</a>
+                    <a href="/blog">Blog</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Support</h4>
+                    <a href="/help">Help Center</a>
+                    <a href="/contact">Contact Us</a>
+                    <a href="/status">Status</a>
+                    <a href="/privacy">Privacy Policy</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Resources</h4>
+                    <a href="/templates">Templates</a>
+                    <a href="/case-studies">Case Studies</a>
+                    <a href="/api-docs">API Documentation</a>
+                    <a href="/community">Community</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Legal</h4>
+                    <a href="/terms">Terms of Service</a>
+                    <a href="/license">License Agreement</a>
+                    <a href="/cookies">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>

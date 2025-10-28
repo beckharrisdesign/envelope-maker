@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Features - PaperCraft</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="design-system.css">
+</head>
+<body>
+    <!-- Software Company Header -->
+    <div id="header-container"></div>
+    
+    <!-- Header Loader -->
+    <script src="header-loader.js"></script>
+
+    <!-- Features Section -->
+    <section class="section section-white">
+        <div class="container">
+            <h1 class="text-center mb-xl">Powerful Features for Professional Packaging</h1>
+            <p class="text-center mb-xl">Everything you need to create perfect paper packaging templates</p>
+            
+            <div class="grid grid-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="font-size: 2.5rem; margin-bottom: var(--space-lg); color: var(--papercraft-green-primary);">⏰</div>
+                        <h3>Instant Template Generation</h3>
+                        <p>Generate professional paper packaging templates in seconds with our advanced template engine. No more manual calculations or design work.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="font-size: 2.5rem; margin-bottom: var(--space-lg); color: var(--papercraft-green-primary);">🔧</div>
+                        <h3>Dual-Tool Support</h3>
+                        <p>Separate cut lines and score lines for professional cutting machine results. Optimized for Cricut, xTool, and Silhouette machines.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="font-size: 2.5rem; margin-bottom: var(--space-lg); color: var(--papercraft-green-primary);">📏</div>
+                        <h3>Custom Dimensions</h3>
+                        <p>Create templates with custom dimensions for every packaging need, from envelopes to boxes. Full control over size and proportions.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="font-size: 2.5rem; margin-bottom: var(--space-lg); color: var(--papercraft-green-primary);">🎨</div>
+                        <h3>Multiple Flap Styles</h3>
+                        <p>Choose from square, pointed, or rounded flap styles to match your design aesthetic and functional requirements.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="font-size: 2.5rem; margin-bottom: var(--space-lg); color: var(--papercraft-green-primary);">📄</div>
+                        <h3>Export Formats</h3>
+                        <p>Export your templates as SVG or PDF files. Compatible with all major cutting machine software and design tools.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="font-size: 2.5rem; margin-bottom: var(--space-lg); color: var(--papercraft-green-primary);">🌐</div>
+                        <h3>Web-Based Platform</h3>
+                        <p>No software installation required. Access your templates from any device with an internet connection. Always up-to-date.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-xl">
+                <a href="pricing.html" class="btn btn-primary">Get Started</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Software Company Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-divider"></div>
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <div class="footer-logomark">🌱</div>
+                        <span class="footer-brand-text">PaperCraft</span>
+                    </div>
+                    <div class="footer-social">
+                        <div class="social-icon" title="Facebook">📘</div>
+                        <div class="social-icon" title="Instagram">📷</div>
+                        <div class="social-icon" title="Twitter">🐦</div>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <a href="/about">About Us</a>
+                    <a href="/careers">Careers</a>
+                    <a href="/press">Press</a>
+                    <a href="/blog">Blog</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Support</h4>
+                    <a href="/help">Help Center</a>
+                    <a href="/contact">Contact Us</a>
+                    <a href="/status">Status</a>
+                    <a href="/privacy">Privacy Policy</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Resources</h4>
+                    <a href="/templates">Templates</a>
+                    <a href="/case-studies">Case Studies</a>
+                    <a href="/api-docs">API Documentation</a>
+                    <a href="/community">Community</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Legal</h4>
+                    <a href="/terms">Terms of Service</a>
+                    <a href="/license">License Agreement</a>
+                    <a href="/cookies">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Header functionality -->
+    <script>
+        async function checkAuthStatus() {
+            try {
+                const response = await fetch('/auth-status', {
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    if (data.authenticated) {
+                        // Update login link to show user status
+                        const loginLink = document.querySelector('.login-link');
+                        if (loginLink) {
+                            if (data.subscriptionDate) {
+                                const date = new Date(data.subscriptionDate);
+                                loginLink.textContent = `Pro User (since ${date.toLocaleDateString()})`;
+                            } else {
+                                loginLink.textContent = 'Pro User';
+                            }
+                            loginLink.href = '/generator';
+                        }
+                        
+                        // Update CTA button
+                        const ctaButton = document.querySelector('.cta-button');
+                        if (ctaButton) {
+                            ctaButton.textContent = 'Go to Generator';
+                            ctaButton.href = '/generator';
+                        }
+                    } else {
+                        // Reset to default state
+                        const loginLink = document.querySelector('.login-link');
+                        if (loginLink) {
+                            loginLink.textContent = 'Log in';
+                            loginLink.href = '/login';
+                        }
+                        
+                        const ctaButton = document.querySelector('.cta-button');
+                        if (ctaButton) {
+                            ctaButton.textContent = 'Get Started';
+                            ctaButton.href = '/pricing';
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error checking auth status:', error);
+            }
+        }
+
+        // Initialize header
+        checkAuthStatus();
+    </script>
+</body>
+</html>

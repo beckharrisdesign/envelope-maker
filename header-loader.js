@@ -55,16 +55,27 @@ class HeaderLoader {
 
     getFallbackHeader() {
         return `
-            <nav style="background: white; padding: 20px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-                <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
-                    <div style="font-size: 1.5rem; font-weight: bold; color: #667eea;">
-                        <a href="/" style="text-decoration: none; color: inherit;">🌱 SeedEnvelope Pro</a>
-                    </div>
-                    <div>
-                        <a href="/pricing" style="background: #667eea; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none;">Get Started</a>
+            <header class="software-header">
+                <div class="container">
+                        <div class="header-left">
+                            <div class="header-logo">
+                                <a href="/" style="text-decoration: none; color: inherit; display: flex; gap: var(--space-xs); align-items: center;">
+                                    <div class="header-logomark">🌱</div>
+                                    <span class="header-brand-text">PaperCraft</span>
+                                </a>
+                            </div>
+                            <nav class="header-nav">
+                                <a href="/storybook" class="nav-link" style="background: rgba(255, 193, 7, 0.1); color: #ff6b35; border-radius: 4px; padding: 4px 8px;">
+                                    📚 Storybook
+                                </a>
+                            </nav>
+                        </div>
+                    <div class="header-buttons">
+                        <a href="/pricing" class="btn btn-primary">Get Started</a>
                     </div>
                 </div>
-            </nav>
+                <div class="header-divider"></div>
+            </header>
         `;
     }
 

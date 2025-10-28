@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PaperCraft Pro - Design System Showcase</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="design-system.css">
+    <style>
+        .showcase-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .showcase-section {
+            margin-bottom: 4rem;
+            padding: 2rem;
+            background: var(--papercraft-white);
+            border-radius: var(--radius-lg);
+            border: 2px solid var(--papercraft-green-border);
+        }
+        
+        .showcase-title {
+            font-size: var(--font-size-4xl);
+            color: var(--papercraft-green-primary);
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--papercraft-green-border);
+            padding-bottom: 0.5rem;
+        }
+        
+        .showcase-subtitle {
+            font-size: var(--font-size-xl);
+            color: var(--papercraft-gray);
+            margin-bottom: 2rem;
+        }
+        
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .component-demo {
+            padding: 1.5rem;
+            border: 1px solid var(--papercraft-border);
+            border-radius: var(--radius-md);
+            background: var(--papercraft-light-gray);
+        }
+        
+        .component-title {
+            font-size: var(--font-size-lg);
+            font-weight: 500;
+            color: var(--papercraft-dark-gray);
+            margin-bottom: 1rem;
+        }
+        
+        .component-description {
+            font-size: var(--font-size-sm);
+            color: var(--papercraft-gray);
+            margin-bottom: 1rem;
+        }
+        
+        .color-swatch {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            border-radius: var(--radius-sm);
+            margin: 0.5rem;
+            border: 2px solid var(--papercraft-border);
+        }
+        
+        .typography-demo {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: var(--papercraft-white);
+            border-radius: var(--radius-sm);
+        }
+        
+        .spacing-demo {
+            display: flex;
+            align-items: center;
+            margin: 1rem 0;
+        }
+        
+        .spacing-box {
+            background: var(--papercraft-green-secondary);
+            border-radius: var(--radius-sm);
+        }
+        
+        .spacing-label {
+            margin-left: 1rem;
+            font-size: var(--font-size-sm);
+            color: var(--papercraft-gray);
+        }
+        
+        .interactive-demo {
+            margin: 1rem 0;
+        }
+        
+        .form-demo {
+            max-width: 400px;
+        }
+        
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: var(--radius-sm);
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: var(--font-size-sm);
+            color: #495057;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+        
+        .nav-demo {
+            background: var(--papercraft-white);
+            border: 2px solid var(--papercraft-green-border);
+            border-radius: var(--radius-lg);
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .hero-demo {
+            background: var(--papercraft-light-gray);
+            padding: 3rem 2rem;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            margin: 1rem 0;
+        }
+        
+        /* Value Proposition Cards */
+        .value-prop-card {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-lg);
+            padding: var(--space-xl);
+            background: var(--papercraft-white);
+            border: 2px solid var(--papercraft-green-border);
+            border-radius: var(--radius-lg);
+            text-align: center;
+        }
+        
+        .value-prop-icon {
+            font-size: 3rem;
+            color: var(--papercraft-green-primary);
+            margin-bottom: var(--space-sm);
+        }
+        
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-md);
+            margin-top: var(--space-lg);
+        }
+        
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md);
+            background: var(--papercraft-light-gray);
+            border-radius: var(--radius-sm);
+        }
+        
+        /* FAQ Accordion */
+        .faq-section {
+            background: var(--papercraft-light-gray);
+            padding: var(--space-2xl);
+            border-radius: var(--radius-lg);
+        }
+        
+        .faq-title {
+            font-size: var(--font-size-4xl);
+            color: var(--papercraft-dark-gray);
+            margin-bottom: var(--space-xl);
+            font-weight: 400;
+        }
+        
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+        
+        .faq-item {
+            border-top: 2px solid var(--papercraft-green-border);
+            border-radius: var(--radius-lg);
+            background: var(--papercraft-light-gray);
+        }
+        
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-xl);
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .faq-question:hover {
+            background: var(--papercraft-white);
+        }
+        
+        .faq-question span {
+            font-size: var(--font-size-lg);
+            font-weight: 500;
+            color: var(--papercraft-dark-gray);
+        }
+        
+        .faq-chevron {
+            font-size: var(--font-size-sm);
+            color: var(--papercraft-gray);
+            transition: transform 0.2s ease;
+        }
+        
+        .faq-item.active .faq-chevron {
+            transform: rotate(180deg);
+        }
+        
+        /* Footer Component */
+        .footer-component {
+            background: var(--papercraft-light-gray);
+            padding: var(--space-5xl) 0 var(--space-2xl) 0;
+            border-radius: var(--radius-lg);
+        }
+        
+        .footer-divider {
+            height: 1px;
+            background: var(--papercraft-green-border);
+            margin-bottom: var(--space-xl);
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1fr repeat(4, 200px);
+            gap: var(--space-2xl);
+            align-items: start;
+        }
+        
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xl);
+        }
+        
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+        
+        .footer-logomark {
+            font-size: var(--font-size-xl);
+        }
+        
+        .footer-brand-text {
+            font-size: var(--font-size-xl);
+            font-weight: 500;
+            color: var(--papercraft-green-primary);
+            letter-spacing: -0.5px;
+        }
+        
+        .footer-social {
+            display: flex;
+            gap: var(--space-sm);
+        }
+        
+        .social-icon {
+            width: 24px;
+            height: 24px;
+            font-size: var(--font-size-sm);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        
+        .social-icon:hover {
+            transform: scale(1.1);
+        }
+        
+        .footer-column {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+        
+        .footer-column h4 {
+            font-size: var(--font-size-base);
+            font-weight: 500;
+            color: var(--papercraft-dark-gray);
+            margin-bottom: var(--space-sm);
+        }
+        
+        .footer-column a {
+            font-size: var(--font-size-sm);
+            color: var(--papercraft-gray);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        
+        .footer-column a:hover {
+            color: var(--papercraft-green-primary);
+        }
+        
+        /* Software Company Header */
+        .software-header {
+            background: var(--papercraft-light-gray);
+            padding: var(--space-lg) 0;
+            border-radius: var(--radius-lg);
+            position: relative;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2xl);
+        }
+        
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+        
+        .header-logomark {
+            font-size: var(--font-size-xl);
+        }
+        
+        .header-brand-text {
+            font-size: var(--font-size-xl);
+            font-weight: 500;
+            color: var(--papercraft-green-primary);
+            letter-spacing: -0.5px;
+        }
+        
+        .header-nav {
+            display: flex;
+            gap: var(--space-xl);
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--papercraft-green-primary);
+        }
+        
+        .nav-link span {
+            font-size: var(--font-size-base);
+            color: var(--papercraft-dark-gray);
+        }
+        
+        .nav-chevron {
+            font-size: var(--font-size-xs);
+            color: var(--papercraft-gray);
+        }
+        
+        .header-buttons {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xl);
+        }
+        
+        .login-link {
+            font-size: var(--font-size-base);
+            color: var(--papercraft-dark-gray);
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        
+        .login-link:hover {
+            color: var(--papercraft-green-primary);
+        }
+        
+        .header-divider {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--papercraft-green-border);
+        }
+        
+        /* Pro Pricing Card */
+        .pro-pricing-card {
+            background: var(--papercraft-green-light);
+            border: 2px solid var(--papercraft-green-accent);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            max-width: 400px;
+        }
+        
+        .pricing-header {
+            margin-bottom: var(--space-xl);
+        }
+        
+        .pricing-header h3 {
+            font-size: var(--font-size-lg);
+            font-weight: 500;
+            color: var(--papercraft-green-accent);
+            margin-bottom: var(--space-xs);
+        }
+        
+        .pricing-amount {
+            display: flex;
+            align-items: baseline;
+            gap: var(--space-xs);
+            margin-bottom: var(--space-xs);
+        }
+        
+        .price {
+            font-size: var(--font-size-4xl);
+            font-weight: 400;
+            color: var(--papercraft-green-accent);
+        }
+        
+        .period {
+            font-size: var(--font-size-xl);
+            color: var(--papercraft-gray);
+        }
+        
+        .pricing-description {
+            font-size: var(--font-size-sm);
+            color: var(--papercraft-dark-gray);
+            margin: 0;
+        }
+        
+        .pricing-btn {
+            width: 100%;
+            margin-bottom: var(--space-xl);
+        }
+        
+        .pricing-divider {
+            height: 1px;
+            background: var(--papercraft-green-border);
+            margin-bottom: var(--space-xl);
+        }
+        
+        .pricing-features {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xs);
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+        
+        .check-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-sm);
+            color: var(--papercraft-green-secondary);
+            font-weight: bold;
+        }
+        
+        .feature-item span {
+            font-size: var(--font-size-sm);
+            color: var(--papercraft-dark-gray);
+        }
+    </style>
+</head>
+<body>
+    <div class="showcase-container">
+        <header class="hero-demo">
+            <h1 style="font-size: var(--font-size-hero); margin-bottom: 1rem;">PaperCraft Pro</h1>
+            <p style="font-size: var(--font-size-lg); color: var(--papercraft-gray);">Design System Showcase</p>
+        </header>
+
+        <!-- Color Palette -->
+        <section class="showcase-section">
+            <h2 class="showcase-title">Color Palette</h2>
+            <p class="showcase-subtitle">Primary colors used throughout the design system</p>
+            
+            <div class="component-grid">
+                <div class="component-demo">
+                    <h3 class="component-title">Primary Colors</h3>
+                    <div class="color-swatch" style="background: var(--papercraft-green-primary);"></div>
+                    <div class="color-swatch" style="background: var(--papercraft-green-secondary);"></div>
+                    <div class="color-swatch" style="background: var(--papercraft-green-accent);"></div>
+                    <div class="code-block">
+--papercraft-green-primary: #0f8446<br>
+--papercraft-green-secondary: #14ae5c<br>
+--papercraft-green-accent: #129c52
+                    </div>
+                </div>
+                
+                <div class="component-demo">
+                    <h3 class="component-title">Neutral Colors</h3>
+                    <div class="color-swatch" style="background: var(--papercraft-dark-gray);"></div>
+                    <div class="color-swatch" style="background: var(--papercraft-gray);"></div>
+                    <div class="color-swatch" style="background: var(--papercraft-light-gray);"></div>
+                    <div class="color-swatch" style="background: var(--papercraft-white);"></div>
+                    <div class="code-block">
+--papercraft-dark-gray: #1b2821<br>
+--papercraft-gray: rgba(27, 40, 33, 0.6)<br>
+--papercraft-light-gray: #fafefc<br>
+--papercraft-white: #ffffff
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Typography Scale -->
+        <section class="showcase-section">
+            <h2 class="showcase-title">Fibonacci Typography Scale</h2>
+            <p class="showcase-subtitle">Mathematically harmonious font sizes based on the Fibonacci sequence</p>
+            
+            <div class="component-demo">
+                <h3 class="component-title">Complete Text Hierarchy</h3>
+                <div style="display: flex; flex-direction: column; gap: 1rem; margin: 2rem 0;">
+                    <div style="display: flex; align-items: center; gap: 2rem; padding: 1rem; background: var(--papercraft-light-gray); border-radius: 8px;">
+                        <div style="min-width: 80px; font-size: var(--font-size-sm); color: var(--papercraft-gray); font-family: monospace;">80px</div>
+                        <h1 style="margin: 0; font-size: var(--font-size-hero);">Hero Headline</h1>
+                        <div style="font-size: var(--font-size-sm); color: var(--papercraft-gray);">--font-size-hero</div>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; gap: 2rem; padding: 1rem; background: var(--papercraft-light-gray); border-radius: 8px;">
+                        <div style="min-width: 80px; font-size: var(--font-size-sm); color: var(--papercraft-gray); font-family: monospace;">64px</div>
+                        <h2 style="margin: 0; font-size: var(--font-size-5xl);">Section Heading</h2>
+                        <div style="font-size: var(--font-size-sm); color: var(--papercraft-gray);">--font-size-5xl</div>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; gap: 2rem; padding: 1rem; background: var(--papercraft-light-gray); border-radius: 8px;">
+                        <div style="min-width: 80px; font-size: var(--font-size-sm); color: var(--papercraft-gray); font-family: monospace;">48px</div>
+                        <h3 style="margin: 0; font-size: var(--font-size-4xl);">Subsection Heading</h3>
+                        <div style="font-size: var(--font-size-sm); color: var(--papercraft-gray);">--font-size-4xl</div>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; gap: 2rem; padding: 1rem; background: var(--papercraft-light-gray); border-radius: 8px;">
+                        <div style="min-width: 80px; font-size: var(--font-size-sm); color: var(--papercraft-gray); font-family: monospace;">40px</div>
+                        <h4 style="margin: 0; font-size: var(--font-size-3xl);">Card Heading</h4>
+                        <div style="font-size: var(--font-size-sm); color: var(--papercraft-gray);">--font-size-3xl</div>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; gap: 2rem; padding: 1rem; background: var(--papercraft-light-gray); border-radius: 8px;">
+                        <div style="min-width: 80px; font-size: var(--font-size-sm); color: var(--papercraft-gray); font-family: monospace;">32px</div>
+                        <h5 style="margin: 0; font-size: var(--font-size-2xl);">Small Heading</h5>
+                        <div style="font-size: var(--font-size-sm); color: var(--papercraft-gray);">--font-size-2xl</div>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; gap: 2rem; padding: 1rem; background: var(--papercraft-light-gray); border-radius: 8px;">
+                        <div style="min-width: 80px; font-size: var(--font-size-sm); color: var(--papercraft-gray); font-family: monospace;">24px</div>
+                        <h6 style="margin: 0; font-size: var(--font-size-xl);">Smallest Heading</h6>
+                        <div style="font-size: var(--font-size-sm); color: var(--papercraft-gray);">--font-size-xl</div>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; gap: 2rem; padding: 1rem; background: var(--papercraft-light-gray); border-radius: 8px;">
+                        <div style="min-width: 80px; font-size: var(--font-size-sm); color: var(--papercraft-gray); font-family: monospace;">20px</div>
+                        <p style="margin: 0; font-size: var(--font-size-lg);">Large Body Text</p>
+                        <div style="font-size: var(--font-size-sm); color: var(--papercraft-gray);">--font-size-lg</div>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; gap: 2rem; padding: 1rem; background: var(--papercraft-light-gray); border-radius: 8px;">
+                        <div style="min-width: 80px; font-size: var(--font-size-sm); color: var(--papercraft-gray); font-family: monospace;">16px</div>
+                        <p style="margin: 0; font-size: var(--font-size-base);">Body Text</p>
+                        <div style="font-size: var(--font-size-sm); color: var(--papercraft-gray);">--font-size-base</div>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; gap: 2rem; padding: 1rem; background: var(--papercraft-light-gray); border-radius: 8px;">
+                        <div style="min-width: 80px; font-size: var(--font-size-sm); color: var(--papercraft-gray); font-family: monospace;">14px</div>
+                        <p style="margin: 0; font-size: var(--font-size-sm);">Small Text</p>
+                        <div style="font-size: var(--font-size-sm); color: var(--papercraft-gray);">--font-size-sm</div>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; gap: 2rem; padding: 1rem; background: var(--papercraft-light-gray); border-radius: 8px;">
+                        <div style="min-width: 80px; font-size: var(--font-size-sm); color: var(--papercraft-gray); font-family: monospace;">12px</div>
+                        <p style="margin: 0; font-size: var(--font-size-xs);">Extra Small Text</p>
+                        <div style="font-size: var(--font-size-sm); color: var(--papercraft-gray);">--font-size-xs</div>
+                    </div>
+                </div>
+                
+                <div class="code-block">
+                    <strong>Fibonacci Scale Explanation:</strong><br>
+                    Based on the mathematical sequence: 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89...<br>
+                    Each size relates harmoniously to the next, creating perfect proportional relationships.<br>
+                    <br>
+                    <strong>CSS Variables:</strong><br>
+                    --font-size-hero: 5rem (80px)<br>
+                    --font-size-5xl: 4rem (64px)<br>
+                    --font-size-4xl: 3rem (48px)<br>
+                    --font-size-3xl: 2.5rem (40px)<br>
+                    --font-size-2xl: 2rem (32px)<br>
+                    --font-size-xl: 1.5rem (24px)<br>
+                    --font-size-lg: 1.25rem (20px)<br>
+                    --font-size-base: 1rem (16px)<br>
+                    --font-size-sm: 0.875rem (14px)<br>
+                    --font-size-xs: 0.75rem (12px)
+                </div>
+            </div>
+        </section>
+
+        <!-- Spacing -->
+        <section class="showcase-section">
+            <h2 class="showcase-title">Spacing Scale</h2>
+            <p class="showcase-subtitle">Consistent spacing values used throughout the design</p>
+            
+            <div class="component-demo">
+                <div class="spacing-demo">
+                    <div class="spacing-box" style="width: var(--space-xs); height: var(--space-xs);"></div>
+                    <span class="spacing-label">xs (4px)</span>
+                </div>
+                <div class="spacing-demo">
+                    <div class="spacing-box" style="width: var(--space-sm); height: var(--space-sm);"></div>
+                    <span class="spacing-label">sm (8px)</span>
+                </div>
+                <div class="spacing-demo">
+                    <div class="spacing-box" style="width: var(--space-md); height: var(--space-md);"></div>
+                    <span class="spacing-label">md (16px)</span>
+                </div>
+                <div class="spacing-demo">
+                    <div class="spacing-box" style="width: var(--space-lg); height: var(--space-lg);"></div>
+                    <span class="spacing-label">lg (24px)</span>
+                </div>
+                <div class="spacing-demo">
+                    <div class="spacing-box" style="width: var(--space-xl); height: var(--space-xl);"></div>
+                    <span class="spacing-label">xl (32px)</span>
+                </div>
+                <div class="spacing-demo">
+                    <div class="spacing-box" style="width: var(--space-2xl); height: var(--space-2xl);"></div>
+                    <span class="spacing-label">2xl (46px)</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Buttons -->
+        <section class="showcase-section">
+            <h2 class="showcase-title">Buttons</h2>
+            <p class="showcase-subtitle">Interactive button components with hover states</p>
+            
+            <div class="component-grid">
+                <div class="component-demo">
+                    <h3 class="component-title">Button Variants</h3>
+                    <div class="interactive-demo">
+                        <button class="btn btn-primary">Primary Button</button>
+                        <button class="btn btn-secondary">Secondary Button</button>
+                        <button class="btn btn-outline">Outline Button</button>
+                        <button class="btn btn-danger">Danger Button</button>
+                    </div>
+                    <div class="code-block">
+&lt;button class="btn btn-primary"&gt;Primary&lt;/button&gt;<br>
+&lt;button class="btn btn-secondary"&gt;Secondary&lt;/button&gt;<br>
+&lt;button class="btn btn-outline"&gt;Outline&lt;/button&gt;<br>
+&lt;button class="btn btn-danger"&gt;Danger&lt;/button&gt;
+                    </div>
+                </div>
+                
+                <div class="component-demo">
+                    <h3 class="component-title">Button States</h3>
+                    <div class="interactive-demo">
+                        <button class="btn btn-primary">Normal State</button>
+                        <button class="btn btn-primary" style="opacity: 0.6; cursor: not-allowed;">Disabled State</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Software Company Header -->
+        <section class="showcase-section">
+            <h2 class="showcase-title">Software Company Header</h2>
+            <p class="showcase-subtitle">Complete header with logo, navigation, and buttons</p>
+            
+            <div class="component-demo">
+                <div class="software-header">
+                    <div class="header-left">
+                        <div class="header-logo">
+                            <div class="header-logomark">🌱</div>
+                            <span class="header-brand-text">PaperCraft</span>
+                        </div>
+                        <div class="header-nav">
+                            <div class="nav-link">
+                                <span>Features</span>
+                                <div class="nav-chevron">▼</div>
+                            </div>
+                            <div class="nav-link">
+                                <span>Pricing</span>
+                                <div class="nav-chevron">▼</div>
+                            </div>
+                            <div class="nav-link">
+                                <span>About</span>
+                                <div class="nav-chevron">▼</div>
+                            </div>
+                            <div class="nav-link">
+                                <span>Contact</span>
+                                <div class="nav-chevron">▼</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="header-buttons">
+                        <span class="login-link">Log in</span>
+                        <button class="btn btn-primary">Try it free</button>
+                    </div>
+                    <div class="header-divider"></div>
+                </div>
+                <div class="code-block">
+&lt;div class="software-header"&gt;<br>
+&nbsp;&nbsp;&lt;div class="header-left"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="header-logo"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="header-logomark"&gt;🌱&lt;/div&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;span class="header-brand-text"&gt;PaperCraft&lt;/span&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="header-nav"&gt;...&lt;/div&gt;<br>
+&nbsp;&nbsp;&lt;/div&gt;<br>
+&nbsp;&nbsp;&lt;div class="header-buttons"&gt;...&lt;/div&gt;<br>
+&lt;/div&gt;
+                </div>
+            </div>
+        </section>
+
+        <!-- Pro Pricing Card -->
+        <section class="showcase-section">
+            <h2 class="showcase-title">Pro Pricing Card</h2>
+            <p class="showcase-subtitle">Dark theme pricing card with highlighted features</p>
+            
+            <div class="component-demo">
+                <div class="pro-pricing-card">
+                    <div class="pricing-header">
+                        <h3>Pro</h3>
+                        <div class="pricing-amount">
+                            <span class="price">$20</span>
+                            <span class="period">per month</span>
+                        </div>
+                        <p class="pricing-description">Small Businesses</p>
+                    </div>
+                    <button class="btn btn-primary pricing-btn">Start with Pro</button>
+                    <div class="pricing-divider"></div>
+                    <div class="pricing-features">
+                        <div class="feature-item">
+                            <div class="check-icon">✓</div>
+                            <span>All Basic features</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="check-icon">✓</div>
+                            <span>Advanced customization</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="check-icon">✓</div>
+                            <span>Priority support</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="check-icon">✓</div>
+                            <span>Bulk generation</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="check-icon">✓</div>
+                            <span>API access</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="code-block">
+&lt;div class="pro-pricing-card"&gt;<br>
+&nbsp;&nbsp;&lt;div class="pricing-header"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;h3&gt;Pro&lt;/h3&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="pricing-amount"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;span class="price"&gt;$20&lt;/span&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;span class="period"&gt;per month&lt;/span&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;p class="pricing-description"&gt;Small Businesses&lt;/p&gt;<br>
+&nbsp;&nbsp;&lt;/div&gt;<br>
+&nbsp;&nbsp;&lt;button class="btn btn-primary pricing-btn"&gt;Start with Pro&lt;/button&gt;<br>
+&nbsp;&nbsp;&lt;div class="pricing-features"&gt;...&lt;/div&gt;<br>
+&lt;/div&gt;
+                </div>
+            </div>
+        </section>
+            
+            <div class="component-grid">
+                <div class="component-demo">
+                    <h3 class="component-title">Value Prop Card</h3>
+                    <div class="value-prop-card">
+                        <div class="value-prop-icon">⏰</div>
+                        <h4>Professional Templates in Seconds</h4>
+                        <p>Generate professional paper packaging templates instantly with our advanced template engine.</p>
+                    </div>
+                    <div class="code-block">
+&lt;div class="value-prop-card"&gt;<br>
+&nbsp;&nbsp;&lt;div class="value-prop-icon"&gt;⏰&lt;/div&gt;<br>
+&nbsp;&nbsp;&lt;h4&gt;Professional Templates in Seconds&lt;/h4&gt;<br>
+&nbsp;&nbsp;&lt;p&gt;Generate professional templates...&lt;/p&gt;<br>
+&lt;/div&gt;
+                    </div>
+                </div>
+                
+                <div class="component-demo">
+                    <h3 class="component-title">Icon Variations</h3>
+                    <div class="icon-grid">
+                        <div class="icon-item">
+                            <div class="value-prop-icon">🔧</div>
+                            <span>Tools</span>
+                        </div>
+                        <div class="icon-item">
+                            <div class="value-prop-icon">📏</div>
+                            <span>Ruler</span>
+                        </div>
+                        <div class="icon-item">
+                            <div class="value-prop-icon">💰</div>
+                            <span>Money</span>
+                        </div>
+                        <div class="icon-item">
+                            <div class="value-prop-icon">⚙️</div>
+                            <span>Settings</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Accordion -->
+        <section class="showcase-section">
+            <h2 class="showcase-title">FAQ Accordion</h2>
+            <p class="showcase-subtitle">Expandable question and answer sections</p>
+            
+            <div class="component-demo">
+                <div class="faq-section">
+                    <h3 class="faq-title">Frequently Asked Questions</h3>
+                    <div class="faq-list">
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>What is PaperCraft Pro?</span>
+                                <div class="faq-chevron">▼</div>
+                            </div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>How does the subscription work?</span>
+                                <div class="faq-chevron">▼</div>
+                            </div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>Can I customize my templates?</span>
+                                <div class="faq-chevron">▼</div>
+                            </div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>What file formats are supported?</span>
+                                <div class="faq-chevron">▼</div>
+                            </div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>Is there customer support?</span>
+                                <div class="faq-chevron">▼</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="code-block">
+&lt;div class="faq-section"&gt;<br>
+&nbsp;&nbsp;&lt;h3 class="faq-title"&gt;Frequently Asked Questions&lt;/h3&gt;<br>
+&nbsp;&nbsp;&lt;div class="faq-list"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="faq-item"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="faq-question"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;span&gt;What is PaperCraft Pro?&lt;/span&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="faq-chevron"&gt;▼&lt;/div&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+&nbsp;&nbsp;&lt;/div&gt;<br>
+&lt;/div&gt;
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer Component -->
+        <section class="showcase-section">
+            <h2 class="showcase-title">Footer Component</h2>
+            <p class="showcase-subtitle">Complete footer with links and social media</p>
+            
+            <div class="component-demo">
+                <div class="footer-component">
+                    <div class="footer-divider"></div>
+                    <div class="footer-content">
+                        <div class="footer-brand">
+                            <div class="footer-logo">
+                                <div class="footer-logomark">🌱</div>
+                                <span class="footer-brand-text">PaperCraft</span>
+                            </div>
+                            <div class="footer-social">
+                                <div class="social-icon">📘</div>
+                                <div class="social-icon">📷</div>
+                                <div class="social-icon">🐦</div>
+                            </div>
+                        </div>
+                        <div class="footer-column">
+                            <h4>Company</h4>
+                            <a href="#">About Us</a>
+                            <a href="#">Careers</a>
+                            <a href="#">Press</a>
+                            <a href="#">Blog</a>
+                        </div>
+                        <div class="footer-column">
+                            <h4>Support</h4>
+                            <a href="#">Help Center</a>
+                            <a href="#">Contact Us</a>
+                            <a href="#">Status</a>
+                            <a href="#">Privacy Policy</a>
+                        </div>
+                        <div class="footer-column">
+                            <h4>Resources</h4>
+                            <a href="#">Templates</a>
+                            <a href="#">Case Studies</a>
+                            <a href="#">API Documentation</a>
+                            <a href="#">Community</a>
+                        </div>
+                        <div class="footer-column">
+                            <h4>Legal</h4>
+                            <a href="#">Terms of Service</a>
+                            <a href="#">License Agreement</a>
+                            <a href="#">Cookie Policy</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="code-block">
+&lt;div class="footer-component"&gt;<br>
+&nbsp;&nbsp;&lt;div class="footer-divider"&gt;&lt;/div&gt;<br>
+&nbsp;&nbsp;&lt;div class="footer-content"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="footer-brand"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="footer-logo"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="footer-logomark"&gt;🌱&lt;/div&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;span class="footer-brand-text"&gt;PaperCraft&lt;/span&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="footer-social"&gt;...&lt;/div&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="footer-column"&gt;...&lt;/div&gt;<br>
+&nbsp;&nbsp;&lt;/div&gt;<br>
+&lt;/div&gt;
+                </div>
+            </div>
+        </section>
+
+        <!-- Grid System -->
+        <section class="showcase-section">
+            <h2 class="showcase-title">Grid System</h2>
+            <p class="showcase-subtitle">Responsive grid layouts</p>
+            
+            <div class="component-demo">
+                <h3 class="component-title">2 Column Grid</h3>
+                <div class="grid grid-2">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4>Grid Item 1</h4>
+                            <p>This is a grid item in a 2-column layout.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <h4>Grid Item 2</h4>
+                            <p>This is another grid item in a 2-column layout.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 class="component-title">3 Column Grid</h3>
+                <div class="grid grid-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4>Item 1</h4>
+                            <p>Three column layout.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <h4>Item 2</h4>
+                            <p>Three column layout.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <h4>Item 3</h4>
+                            <p>Three column layout.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Utility Classes -->
+        <section class="showcase-section">
+            <h2 class="showcase-title">Utility Classes</h2>
+            <p class="showcase-subtitle">Helper classes for common styling needs</p>
+            
+            <div class="component-grid">
+                <div class="component-demo">
+                    <h3 class="component-title">Text Utilities</h3>
+                    <p class="text-center">Centered text</p>
+                    <p class="text-left">Left aligned text</p>
+                    <p class="text-right">Right aligned text</p>
+                    <p class="text-green">Green colored text</p>
+                    <p class="text-gray">Gray colored text</p>
+                </div>
+                
+                <div class="component-demo">
+                    <h3 class="component-title">Background Utilities</h3>
+                    <div class="bg-white p-md mb-sm">White background</div>
+                    <div class="bg-light p-md mb-sm">Light background</div>
+                </div>
+                
+                <div class="component-demo">
+                    <h3 class="component-title">Spacing Utilities</h3>
+                    <div class="mb-lg">Margin bottom large</div>
+                    <div class="mt-md">Margin top medium</div>
+                    <div class="p-lg">Padding large</div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer" style="margin-top: 4rem;">
+            <div class="container">
+                <p>&copy; 2024 PaperCraft Pro. Design System Showcase</p>
+                <p>Professional paper packaging templates for serious makers.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Add some interactive functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎨 Design System Showcase loaded');
+            
+            // Add hover effects to color swatches
+            const colorSwatches = document.querySelectorAll('.color-swatch');
+            colorSwatches.forEach(swatch => {
+                swatch.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.1)';
+                    this.style.transition = 'transform 0.2s ease';
+                });
+                swatch.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+            
+            // Add click to copy functionality for code blocks
+            const codeBlocks = document.querySelectorAll('.code-block');
+            codeBlocks.forEach(block => {
+                block.addEventListener('click', function() {
+                    navigator.clipboard.writeText(this.textContent).then(() => {
+                        const originalText = this.textContent;
+                        this.textContent = 'Copied to clipboard!';
+                        setTimeout(() => {
+                            this.textContent = originalText;
+                        }, 1000);
+                    });
+                });
+                block.style.cursor = 'pointer';
+                block.title = 'Click to copy';
+            });
+            
+            // Add FAQ accordion functionality
+            const faqItems = document.querySelectorAll('.faq-item');
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                question.addEventListener('click', function() {
+                    // Toggle active state
+                    item.classList.toggle('active');
+                    
+                    // Close other items
+                    faqItems.forEach(otherItem => {
+                        if (otherItem !== item) {
+                            otherItem.classList.remove('active');
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

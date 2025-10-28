@@ -1,11 +1,12 @@
 {
   "name": "seed-envelope-pro",
   "version": "1.0.0",
-  "description": "Professional seed envelope template generator with Stripe subscription",
+  "description": "Professional paper packaging template generator with Stripe subscription",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
+    "storybook": "open storybook.html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [

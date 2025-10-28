@@ -1,7 +1,7 @@
-# SeedEnvelope Pro - Replit Setup
+# PaperCraft - Replit Setup
 
 ## Overview
-Professional seed envelope template generator with Stripe subscription integration. This is a SaaS application that generates custom seed envelope templates for Cricut, xTool, and other cutting machines.
+Professional paper packaging template generator with Stripe subscription integration. This is a SaaS application that generates custom paper packaging templates for Cricut, xTool, and other cutting machines.
 
 **Current Status**: ✅ Configured and running on Replit
 
@@ -71,7 +71,7 @@ The following secrets need to be configured via Replit Secrets:
 ## Features
 
 ### Envelope Generator
-- 4 standard seed envelope sizes (#3, #4.5, #5, #6)
+- 4 standard envelope sizes (#3, #4.5, #5, #6)
 - Dual-tool support (cut lines and score lines)
 - Multiple flap styles (square, pointed, rounded)
 - Adjustable flap heights and overlap amounts

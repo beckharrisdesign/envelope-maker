@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - PaperCraft</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="design-system.css">
+</head>
+<body>
+    <!-- Software Company Header -->
+    <header class="software-header">
+        <div class="container">
+            <div class="header-left">
+                <div class="header-logo">
+                    <div class="header-logomark">🌱</div>
+                    <span class="header-brand-text">PaperCraft</span>
+                </div>
+                <nav class="header-nav">
+                    <a href="/features" class="nav-link">
+                        Features
+                        <span class="nav-chevron">▼</span>
+                    </a>
+                    <a href="/pricing" class="nav-link">
+                        Pricing
+                        <span class="nav-chevron">▼</span>
+                    </a>
+                    <a href="/about" class="nav-link">
+                        About
+                        <span class="nav-chevron">▼</span>
+                    </a>
+                    <a href="/contact" class="nav-link">
+                        Contact
+                        <span class="nav-chevron">▼</span>
+                    </a>
+                </nav>
+            </div>
+            <div class="header-buttons">
+                <a href="/login" class="btn btn-secondary">Log in</a>
+                <a href="/pricing" class="btn btn-primary">Get Started</a>
+            </div>
+        </div>
+        <div class="header-divider"></div>
+    </header>
+
+    <!-- Privacy Policy Section -->
+    <section class="section section-white">
+        <div class="container">
+            <h1 class="text-center mb-xl">Privacy Policy</h1>
+            <p class="text-center mb-xl">Last updated: March 2024</p>
+            
+            <div class="card">
+                <div class="card-body">
+                    <h3>Information We Collect</h3>
+                    <p>We collect information you provide directly to us, such as when you create an account, subscribe to our service, or contact us for support.</p>
+                    
+                    <h4>Personal Information</h4>
+                    <ul>
+                        <li>Email address</li>
+                        <li>Name (if provided)</li>
+                        <li>Payment information (processed securely through Stripe)</li>
+                    </ul>
+                    
+                    <h4>Usage Information</h4>
+                    <ul>
+                        <li>Template generation activity</li>
+                        <li>Feature usage patterns</li>
+                        <li>Device and browser information</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card mt-lg">
+                <div class="card-body">
+                    <h3>How We Use Your Information</h3>
+                    <ul>
+                        <li>Provide and maintain our service</li>
+                        <li>Process payments and manage subscriptions</li>
+                        <li>Send you important updates about our service</li>
+                        <li>Improve our products and services</li>
+                        <li>Provide customer support</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card mt-lg">
+                <div class="card-body">
+                    <h3>Data Security</h3>
+                    <p>We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.</p>
+                    <p>All payment processing is handled securely through Stripe, and we never store your payment card information.</p>
+                </div>
+            </div>
+
+            <div class="card mt-lg">
+                <div class="card-body">
+                    <h3>Contact Us</h3>
+                    <p>If you have any questions about this Privacy Policy, please contact us at <a href="mailto:privacy@papercraftpro.com">privacy@papercraftpro.com</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Software Company Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-divider"></div>
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <div class="footer-logomark">🌱</div>
+                        <span class="footer-brand-text">PaperCraft</span>
+                    </div>
+                    <div class="footer-social">
+                        <div class="social-icon" title="Facebook">📘</div>
+                        <div class="social-icon" title="Instagram">📷</div>
+                        <div class="social-icon" title="Twitter">🐦</div>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <a href="/about">About Us</a>
+                    <a href="/careers">Careers</a>
+                    <a href="/press">Press</a>
+                    <a href="/blog">Blog</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Support</h4>
+                    <a href="/help">Help Center</a>
+                    <a href="/contact">Contact Us</a>
+                    <a href="/status">Status</a>
+                    <a href="/privacy">Privacy Policy</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Resources</h4>
+                    <a href="/templates">Templates</a>
+                    <a href="/case-studies">Case Studies</a>
+                    <a href="/api-docs">API Documentation</a>
+                    <a href="/community">Community</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Legal</h4>
+                    <a href="/terms">Terms of Service</a>
+                    <a href="/license">License Agreement</a>
+                    <a href="/cookies">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Header functionality -->
+    <script>
+        async function checkAuthStatus() {
+            try {
+                const response = await fetch('/auth-status', {
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    if (data.authenticated) {
+                        // Update login link to show user status
+                        const loginLink = document.querySelector('.login-link');
+                        if (loginLink) {
+                            if (data.subscriptionDate) {
+                                const date = new Date(data.subscriptionDate);
+                                loginLink.textContent = `Pro User (since ${date.toLocaleDateString()})`;
+                            } else {
+                                loginLink.textContent = 'Pro User';
+                            }
+                            loginLink.href = '/generator';
+                        }
+                        
+                        // Update CTA button
+                        const ctaButton = document.querySelector('.cta-button');
+                        if (ctaButton) {
+                            ctaButton.textContent = 'Go to Generator';
+                            ctaButton.href = '/generator';
+                        }
+                    } else {
+                        // Reset to default state
+                        const loginLink = document.querySelector('.login-link');
+                        if (loginLink) {
+                            loginLink.textContent = 'Log in';
+                            loginLink.href = '/login';
+                        }
+                        
+                        const ctaButton = document.querySelector('.cta-button');
+                        if (ctaButton) {
+                            ctaButton.textContent = 'Get Started';
+                            ctaButton.href = '/pricing';
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error checking auth status:', error);
+            }
+        }
+
+        // Initialize header
+        checkAuthStatus();
+    </script>
+</body>
+</html>

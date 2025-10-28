@@ -49,7 +49,7 @@ function requireAuth(req, res, next) {
                 <head><title>Access Denied</title></head>
                 <body style="font-family: Arial, sans-serif; text-align: center; padding: 50px;">
                     <h1>🔒 Access Denied</h1>
-                    <p>You need to subscribe to access the Seed Envelope Generator.</p>
+                    <p>You need to subscribe to access the PaperCraft Generator.</p>
                     <a href="/pricing" style="background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Subscribe Now</a>
                 </body>
             </html>
@@ -88,6 +88,80 @@ app.get('/login', (req, res) => {
 
 app.get('/generator', requireAuth, (req, res) => {
     res.sendFile(path.join(__dirname, 'generator.html'));
+});
+
+// Header Navigation Routes
+app.get('/features', (req, res) => {
+    res.sendFile(path.join(__dirname, 'features.html'));
+});
+
+app.get('/about', (req, res) => {
+    res.sendFile(path.join(__dirname, 'about.html'));
+});
+
+app.get('/contact', (req, res) => {
+    res.sendFile(path.join(__dirname, 'contact.html'));
+});
+
+// Footer Company Routes
+app.get('/careers', (req, res) => {
+    res.sendFile(path.join(__dirname, 'careers.html'));
+});
+
+app.get('/press', (req, res) => {
+    res.sendFile(path.join(__dirname, 'press.html'));
+});
+
+app.get('/blog', (req, res) => {
+    res.sendFile(path.join(__dirname, 'blog.html'));
+});
+
+// Footer Support Routes
+app.get('/help', (req, res) => {
+    res.sendFile(path.join(__dirname, 'help.html'));
+});
+
+app.get('/status', (req, res) => {
+    res.sendFile(path.join(__dirname, 'status.html'));
+});
+
+app.get('/privacy', (req, res) => {
+    res.sendFile(path.join(__dirname, 'privacy.html'));
+});
+
+// Footer Resources Routes
+app.get('/templates', (req, res) => {
+    res.sendFile(path.join(__dirname, 'templates.html'));
+});
+
+app.get('/case-studies', (req, res) => {
+    res.sendFile(path.join(__dirname, 'case-studies.html'));
+});
+
+app.get('/api-docs', (req, res) => {
+    res.sendFile(path.join(__dirname, 'api-docs.html'));
+});
+
+app.get('/community', (req, res) => {
+    res.sendFile(path.join(__dirname, 'community.html'));
+});
+
+// Footer Legal Routes
+app.get('/terms', (req, res) => {
+    res.sendFile(path.join(__dirname, 'terms.html'));
+});
+
+app.get('/license', (req, res) => {
+    res.sendFile(path.join(__dirname, 'license.html'));
+});
+
+app.get('/cookies', (req, res) => {
+    res.sendFile(path.join(__dirname, 'cookies.html'));
+});
+
+// Storybook route for design system showcase
+app.get('/storybook', (req, res) => {
+    res.sendFile(path.join(__dirname, 'storybook.html'));
 });
 
 // Direct access to tool (redirects to generator if authenticated, otherwise to pricing)
@@ -160,7 +234,7 @@ app.post('/create-checkout-session', async (req, res) => {
             cancel_url: cancelUrl,
             customer_creation: 'always', // Always create a customer
             metadata: {
-                product: 'SeedEnvelope Pro'
+                product: 'PaperCraft'
             }
         });
 

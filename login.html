@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - SeedEnvelope Pro</title>
+    <title>Login - PaperCraft</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="design-system.css">
     <style>
         .login-page {
@@ -75,8 +78,11 @@
     </style>
 </head>
 <body>
-    <!-- Navigation -->
+    <!-- Software Company Header -->
     <div id="header-container"></div>
+    
+    <!-- Header Loader -->
+    <script src="header-loader.js"></script>
 
     <div class="login-page">
         <div class="login-card">
@@ -100,8 +106,6 @@
                 
                 <div id="status-message" class="status-message"></div>
             </form>
-            
-            <a href="/" class="back-link">← Back to Home</a>
         </div>
     </div>
 
@@ -137,6 +141,55 @@
             
             // Check if user is already authenticated
             checkAuthStatus();
+            
+            // Header functionality
+            async function checkAuthStatus() {
+                try {
+                    const response = await fetch('/auth-status', {
+                        credentials: 'include'
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        
+                        if (data.authenticated) {
+                            // Update login link to show user status
+                            const loginLink = document.querySelector('.login-link');
+                            if (loginLink) {
+                                if (data.subscriptionDate) {
+                                    const date = new Date(data.subscriptionDate);
+                                    loginLink.textContent = `Pro User (since ${date.toLocaleDateString()})`;
+                                } else {
+                                    loginLink.textContent = 'Pro User';
+                                }
+                                loginLink.href = '/generator';
+                            }
+                            
+                            // Update CTA button
+                            const ctaButton = document.querySelector('.cta-button');
+                            if (ctaButton) {
+                                ctaButton.textContent = 'Go to Generator';
+                                ctaButton.href = '/generator';
+                            }
+                        } else {
+                            // Reset to default state
+                            const loginLink = document.querySelector('.login-link');
+                            if (loginLink) {
+                                loginLink.textContent = 'Log in';
+                                loginLink.href = '/login';
+                            }
+                            
+                            const ctaButton = document.querySelector('.cta-button');
+                            if (ctaButton) {
+                                ctaButton.textContent = 'Get Started';
+                                ctaButton.href = '/pricing';
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error checking auth status:', error);
+                }
+            }
             
             loginForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
@@ -215,5 +268,52 @@
             statusMessage.style.display = 'block';
         }
     </script>
+    
+    <!-- Software Company Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-divider"></div>
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <div class="footer-logomark">🌱</div>
+                        <span class="footer-brand-text">PaperCraft</span>
+                    </div>
+                    <div class="footer-social">
+                        <div class="social-icon" title="Facebook">📘</div>
+                        <div class="social-icon" title="Instagram">📷</div>
+                        <div class="social-icon" title="Twitter">🐦</div>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <a href="/about">About Us</a>
+                    <a href="/careers">Careers</a>
+                    <a href="/press">Press</a>
+                    <a href="/blog">Blog</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Support</h4>
+                    <a href="/help">Help Center</a>
+                    <a href="/contact">Contact Us</a>
+                    <a href="/status">Status</a>
+                    <a href="/privacy">Privacy Policy</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Resources</h4>
+                    <a href="/templates">Templates</a>
+                    <a href="/case-studies">Case Studies</a>
+                    <a href="/api-docs">API Documentation</a>
+                    <a href="/community">Community</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Legal</h4>
+                    <a href="/terms">Terms of Service</a>
+                    <a href="/license">License Agreement</a>
+                    <a href="/cookies">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

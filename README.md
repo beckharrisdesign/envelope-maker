@@ -1,10 +1,10 @@
-# SeedEnvelope Pro - Professional Seed Envelope Template Generator
+# PaperCraft - Professional Paper Packaging Template Generator
 
-A subscription-based SaaS application that generates custom seed envelope templates for Cricut, xTool, and other cutting machines. Features dual-tool support with separate cut lines and score lines for professional results.
+A subscription-based SaaS application that generates custom paper packaging templates for Cricut, xTool, and other cutting machines. Features dual-tool support with separate cut lines and score lines for professional results.
 
 ## 🌱 Features
 
-- **4 Standard Seed Envelope Sizes**: #3, #4.5, #5, and #6 envelopes optimized for seed storage
+- **4 Standard Envelope Sizes**: #3, #4.5, #5, and #6 envelopes for various packaging needs
 - **Dual-Tool Support**: Separate cut lines (blade) and score lines (scoring head)
 - **Multiple Flap Styles**: Square, pointed, or rounded flaps with adjustable heights
 - **Export Options**: SVG for cutting machines or PDF for printing
@@ -54,7 +54,7 @@ A subscription-based SaaS application that generates custom seed envelope templa
 1. **Create Stripe Account**: https://stripe.com
 2. **Get API Keys**: Dashboard → Developers → API Keys
 3. **Create Product & Price**:
-   - Name: "SeedEnvelope Pro"
+   - Name: "PaperCraft"
    - Price: $20.00/year (recurring)
    - Copy the Price ID (starts with `price_`)
 
@@ -236,4 +236,4 @@ MIT License - see LICENSE file for details
 
 ---
 
-**SeedEnvelope Pro** - Professional seed envelope templates for serious gardeners. 🌱✂️
+**PaperCraft** - Professional paper packaging templates for makers and businesses. 🌱✂️

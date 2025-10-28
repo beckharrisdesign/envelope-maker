@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pricing - SeedEnvelope Pro</title>
+    <title>Pricing - PaperCraft</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="design-system.css">
     <style>
         .pricing-hero {
@@ -216,60 +219,34 @@
             transform: translateY(-1px);
             box-shadow: var(--etsy-shadow-hover);
         }
-        
-        .back-link {
-            display: inline-block;
-            margin-bottom: 40px;
-            color: var(--etsy-orange);
-            text-decoration: none;
-            font-weight: 500;
-        }
-        
-        .back-link:hover {
-            text-decoration: underline;
-        }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="nav">
-        <div class="container">
-            <a href="/" class="nav-brand">🌱 SeedEnvelope Pro</a>
-            <div class="nav-buttons" id="nav-buttons">
-                <!-- Logged out state -->
-                <div id="logged-out-nav" style="display: block;">
-                    <button id="login-btn" class="btn btn-primary">Login</button>
-                    <a href="/pricing" class="btn btn-secondary">Get Started</a>
-                </div>
-                <!-- Logged in state -->
-                <div id="logged-in-nav" style="display: none;">
-                    <span id="user-info" style="margin-right: 20px; color: var(--etsy-dark-gray); font-weight: 500;"></span>
-                    <a href="/generator" class="btn btn-primary">Generator</a>
-                    <button id="logout-btn" class="btn btn-danger">Logout</button>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <!-- Software Company Header -->
+    <div id="header-container"></div>
+    
+    <!-- Header Loader -->
+    <script src="header-loader.js"></script>
     
     <div class="container">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <a href="landing.html" class="back-link">← Back to Home</a>
-        </div>
         
         <div class="pricing-hero">
             <h1>Choose Your Plan</h1>
-            <p>Start creating professional seed envelope templates today</p>
+            <p>Start creating professional paper packaging templates today</p>
+            <div style="background: #ff6b6b; color: white; padding: 8px 16px; border-radius: 20px; display: inline-block; margin-top: 20px; font-size: 0.9rem; font-weight: 500;">
+                🚀 Coming Soon - Pro features in development
+            </div>
         </div>
 
         <div class="pricing-container">
             <div class="pricing-card">
                 <div class="popular-badge">Most Popular</div>
-                <div class="plan-name">SeedEnvelope Pro</div>
+                <div class="plan-name">PaperCraft</div>
                 <div class="price">$20<span class="price-period">/year</span></div>
                 
                 <ul class="features-list">
                     <li>Unlimited template generation</li>
-                    <li>All 4 standard seed envelope sizes (#3, #4.5, #5, #6)</li>
+                    <li>All 4 standard envelope sizes (#3, #4.5, #5, #6)</li>
                     <li>3 flap styles: Square, Pointed, Rounded</li>
                     <li>Customizable flap height and overlap</li>
                     <li>SVG export for cutting machines</li>
@@ -293,81 +270,62 @@
         </div>
     </div>
 
-    <!-- Session-Aware Header JavaScript -->
+    <!-- Header JavaScript -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('🔍 Pricing page: DOMContentLoaded fired');
-            
-            // Check auth status and update header
-            checkAuthStatus();
-            
-            // Add login button handler
-            const loginBtn = document.getElementById('login-btn');
-            if (loginBtn) {
-                loginBtn.addEventListener('click', function(e) {
-                    console.log('🔍 Login button clicked!');
-                    e.preventDefault();
-                    
-                    fetch('/auth-status', { credentials: 'include' })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.authenticated) {
-                                window.location.href = '/generator';
-                            } else {
-                                window.location.href = '/login';
-                            }
-                        });
-                });
-            }
-            
-            // Add logout button handler
-            const logoutBtn = document.getElementById('logout-btn');
-            if (logoutBtn) {
-                logoutBtn.addEventListener('click', function(e) {
-                    console.log('🔍 Logout button clicked!');
-                    e.preventDefault();
-                    
-                    fetch('/logout', { method: 'POST', credentials: 'include' })
-                        .then(() => {
-                            window.location.href = '/';
-                        });
-                });
-            }
-        });
-        
-        // Check authentication status and update header
+        // Header functionality
         async function checkAuthStatus() {
             try {
-                const response = await fetch('/auth-status', { credentials: 'include' });
+                const response = await fetch('/auth-status', {
+                    credentials: 'include'
+                });
+                
                 if (response.ok) {
                     const data = await response.json();
-                    console.log('🔍 Auth status:', data);
                     
                     if (data.authenticated) {
-                        // User is logged in
-                        document.getElementById('logged-out-nav').style.display = 'none';
-                        document.getElementById('logged-in-nav').style.display = 'block';
+                        // Update login link to show user status
+                        const loginLink = document.querySelector('.login-link');
+                        if (loginLink) {
+                            if (data.subscriptionDate) {
+                                const date = new Date(data.subscriptionDate);
+                                loginLink.textContent = `Pro User (since ${date.toLocaleDateString()})`;
+                            } else {
+                                loginLink.textContent = 'Pro User';
+                            }
+                            loginLink.href = '/generator';
+                        }
                         
-                        const userInfo = document.getElementById('user-info');
-                        if (data.subscriptionDate) {
-                            const date = new Date(data.subscriptionDate);
-                            userInfo.textContent = `Pro User (since ${date.toLocaleDateString()})`;
-                        } else {
-                            userInfo.textContent = 'Pro User';
+                        // Update CTA button
+                        const ctaButton = document.querySelector('.cta-button');
+                        if (ctaButton) {
+                            ctaButton.textContent = 'Go to Generator';
+                            ctaButton.href = '/generator';
                         }
                     } else {
-                        // User is not logged in
-                        document.getElementById('logged-out-nav').style.display = 'block';
-                        document.getElementById('logged-in-nav').style.display = 'none';
+                        // Reset to default state
+                        const loginLink = document.querySelector('.login-link');
+                        if (loginLink) {
+                            loginLink.textContent = 'Log in';
+                            loginLink.href = '/login';
+                        }
+                        
+                        const ctaButton = document.querySelector('.cta-button');
+                        if (ctaButton) {
+                            ctaButton.textContent = 'Get Started';
+                            ctaButton.href = '/pricing';
+                        }
                     }
                 }
             } catch (error) {
                 console.error('Error checking auth status:', error);
-                // Default to logged out state
-                document.getElementById('logged-out-nav').style.display = 'block';
-                document.getElementById('logged-in-nav').style.display = 'none';
             }
         }
+
+        // Initialize header when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔍 Pricing page: DOMContentLoaded fired');
+            checkAuthStatus();
+        });
     </script>
     
     <!-- Stripe Integration -->
@@ -454,6 +412,53 @@
         }
 
     </script>
+
+    <!-- Software Company Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-divider"></div>
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <div class="footer-logomark">🌱</div>
+                        <span class="footer-brand-text">PaperCraft</span>
+                    </div>
+                    <div class="footer-social">
+                        <div class="social-icon" title="Facebook">📘</div>
+                        <div class="social-icon" title="Instagram">📷</div>
+                        <div class="social-icon" title="Twitter">🐦</div>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <a href="/about">About Us</a>
+                    <a href="/careers">Careers</a>
+                    <a href="/press">Press</a>
+                    <a href="/blog">Blog</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Support</h4>
+                    <a href="/help">Help Center</a>
+                    <a href="/contact">Contact Us</a>
+                    <a href="/status">Status</a>
+                    <a href="/privacy">Privacy Policy</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Resources</h4>
+                    <a href="/templates">Templates</a>
+                    <a href="/case-studies">Case Studies</a>
+                    <a href="/api-docs">API Documentation</a>
+                    <a href="/community">Community</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Legal</h4>
+                    <a href="/terms">Terms of Service</a>
+                    <a href="/license">License Agreement</a>
+                    <a href="/cookies">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 
 </body>
 </html>
